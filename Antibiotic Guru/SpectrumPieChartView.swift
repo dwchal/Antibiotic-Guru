@@ -26,9 +26,10 @@ struct SpectrumPieChartView: View {
 
     var body: some View {
         GeometryReader { geo in
-            let size = min(geo.size.width, geo.size.height)
             let isCompact = horizontalSizeClass == .compact
-            let pieRadius = size * (isCompact ? 0.30 : 0.32)
+            // On compact, use width as the reference since it's the constraining dimension
+            let size = isCompact ? geo.size.width : min(geo.size.width, geo.size.height)
+            let pieRadius = size * (isCompact ? 0.24 : 0.32)
             let center = CGPoint(x: geo.size.width / 2, y: geo.size.height / 2)
 
             ZStack {
@@ -73,29 +74,38 @@ struct SpectrumPieChartView: View {
                     let labelRadius = pieRadius + size * (isCompact ? 0.16 : 0.18)
                     let labelX = center.x + labelRadius * cos(midAngleRad)
                     let labelY = center.y + labelRadius * sin(midAngleRad)
-                    let fontSize: CGFloat = isCompact ? 8 : 11
+                    let fontSize: CGFloat = isCompact ? 9 : 11
+                    let cosAngle = cos(midAngleRad)
+                    let isRightSide = cosAngle > 0.2
+                    let isLeftSide = cosAngle < -0.2
+                    let labelWidth: CGFloat = isCompact ? size * 0.24 : size * 0.20
+                    let alignment: Alignment = isRightSide ? .leading : (isLeftSide ? .trailing : .center)
+                    let textAlignment: TextAlignment = isRightSide ? .leading : (isLeftSide ? .trailing : .center)
+                    // Shift the frame so the anchored edge aligns with the label point
+                    let adjustedX = isRightSide ? labelX + labelWidth / 2 : (isLeftSide ? labelX - labelWidth / 2 : labelX)
 
                     Text(bacterium.shortName)
                         .font(.system(size: fontSize, weight: .medium))
                         .foregroundColor(.primary)
-                        .multilineTextAlignment(.center)
+                        .multilineTextAlignment(textAlignment)
                         .lineLimit(3)
-                        .fixedSize()
-                        .position(x: labelX, y: labelY)
+                        .frame(width: labelWidth, alignment: alignment)
+                        .position(x: adjustedX, y: labelY)
                 }
 
-                // Category labels (outermost ring)
-                ForEach(categoryLabelPositions(filteredBacteria), id: \.category.rawValue) { info in
-                    let angleRad = info.angle * .pi / 180
-                    let catRadius = pieRadius + size * (isCompact ? 0.28 : 0.30)
-                    let x = center.x + catRadius * cos(angleRad)
-                    let y = center.y + catRadius * sin(angleRad)
-                    let fontSize: CGFloat = isCompact ? 10 : 14
+                // Category labels (outermost ring) - only on regular size
+                if !isCompact {
+                    ForEach(categoryLabelPositions(filteredBacteria), id: \.category.rawValue) { info in
+                        let angleRad = info.angle * .pi / 180
+                        let catRadius = pieRadius + size * 0.30
+                        let x = center.x + catRadius * cos(angleRad)
+                        let y = center.y + catRadius * sin(angleRad)
 
-                    Text(info.category.rawValue)
-                        .font(.system(size: fontSize, weight: .bold))
-                        .foregroundColor(.primary)
-                        .position(x: x, y: y)
+                        Text(info.category.rawValue)
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundColor(.primary)
+                            .position(x: x, y: y)
+                    }
                 }
             }
         }

@@ -52,14 +52,15 @@ struct ContentView: View {
     private var compactLayout: some View {
         TabView {
             Tab("Chart", systemImage: "chart.pie") {
-                VStack(spacing: 0) {
+                VStack(spacing: 4) {
                     selectionHeader
                     chartSection
                     filterBar
-                        .padding(.vertical, 8)
-                        .background(Color.gray.opacity(0.1))
+                        .padding(.vertical, 6)
                     disclaimer
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color(.systemBackground).ignoresSafeArea())
             }
             Tab("Antibiotics", systemImage: "pills") {
                 NavigationStack {
@@ -120,7 +121,8 @@ struct ContentView: View {
                 categoryFilter: categoryFilter
             )
         }
-        .padding(8)
+        .padding(.horizontal, horizontalSizeClass == .compact ? 0 : 8)
+        .padding(.vertical, 8)
     }
 
     private var disclaimer: some View {

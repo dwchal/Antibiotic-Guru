@@ -41,25 +41,25 @@ struct Disease: Identifiable {
 let allBacteria: [Bacterium] = [
     // Gram Positives (clockwise from top)
     Bacterium(id: "enterococcus", name: "Enterococcus", shortName: "Enterococcus", category: .gramPositive),
-    Bacterium(id: "strepPneumo", name: "Strep Pneumoniae", shortName: "Strep Pneumoniae", category: .gramPositive),
-    Bacterium(id: "strepNonPneumo", name: "Strep (Non-Pneumoniae)", shortName: "Strep (Non-Pneumo)", category: .gramPositive),
-    Bacterium(id: "staphNonAureus", name: "Staph (Non-Aureus)", shortName: "Staph (Non-Aureus)", category: .gramPositive),
-    Bacterium(id: "mssa", name: "Staph Aureus (MSSA)", shortName: "Staph Aureus (MSSA)", category: .gramPositive),
-    Bacterium(id: "mrsa", name: "Staph Aureus (MRSA)", shortName: "Staph Aureus (MRSA)", category: .gramPositive),
+    Bacterium(id: "strepPneumo", name: "Streptococcus pneumoniae", shortName: "S. pneumoniae", category: .gramPositive),
+    Bacterium(id: "strepNonPneumo", name: "Streptococcus (non-pneumoniae)", shortName: "Strep (non-pneumo)", category: .gramPositive),
+    Bacterium(id: "staphNonAureus", name: "Staphylococcus (non-aureus)", shortName: "Staph (non-aureus)", category: .gramPositive),
+    Bacterium(id: "mssa", name: "Staphylococcus aureus (MSSA)", shortName: "S. aureus (MSSA)", category: .gramPositive),
+    Bacterium(id: "mrsa", name: "Staphylococcus aureus (MRSA)", shortName: "S. aureus (MRSA)", category: .gramPositive),
 
     // Atypicals
-    Bacterium(id: "mycoplasma", name: "Mycoplasma pneumoniae", shortName: "Mycoplasma pneumoniae", category: .atypicals),
+    Bacterium(id: "mycoplasma", name: "Mycoplasma pneumoniae", shortName: "M. pneumoniae", category: .atypicals),
     Bacterium(id: "chlamydophila", name: "Chlamydophila", shortName: "Chlamydophila", category: .atypicals),
     Bacterium(id: "legionella", name: "Legionella", shortName: "Legionella", category: .atypicals),
 
     // Anaerobes
-    Bacterium(id: "anaerobesBelow", name: "Anaerobes Below The Diaphragm", shortName: "Anaerobes Below\nThe Diaphragm", category: .anaerobes),
-    Bacterium(id: "anaerobesAbove", name: "Anaerobes Above The Diaphragm", shortName: "Anaerobes Above\nThe Diaphragm", category: .anaerobes),
+    Bacterium(id: "anaerobesBelow", name: "Anaerobes Below the Diaphragm", shortName: "Anaerobes\nBelow Diaphragm", category: .anaerobes),
+    Bacterium(id: "anaerobesAbove", name: "Anaerobes Above the Diaphragm", shortName: "Anaerobes\nAbove Diaphragm", category: .anaerobes),
 
     // Gram Negatives
-    Bacterium(id: "pseudomonas", name: "Pseudomonas Aeruginosa", shortName: "Pseudomonas Aeruginosa", category: .gramNegative),
-    Bacterium(id: "nosocomialGN", name: "Nosocomial Acquired Gram Neg.", shortName: "Nosocomial Acquired\nGram Negatives", category: .gramNegative),
-    Bacterium(id: "communityGN", name: "Community Acquired Gram Neg.", shortName: "Community Acquired\nGram Negatives", category: .gramNegative),
+    Bacterium(id: "pseudomonas", name: "Pseudomonas aeruginosa", shortName: "P. aeruginosa", category: .gramNegative),
+    Bacterium(id: "nosocomialGN", name: "Nosocomial Acquired Gram Neg.", shortName: "Nosocomial\nGram Neg.", category: .gramNegative),
+    Bacterium(id: "communityGN", name: "Community Acquired Gram Neg.", shortName: "Community\nGram Neg.", category: .gramNegative),
 ]
 
 // MARK: - Antibiotic Coverage Data
