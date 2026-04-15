@@ -7,8 +7,6 @@ struct SpectrumPieChartView: View {
     let categoryFilter: BacteriaCategory?
 
     private let uncoveredColor = Color(red: 0.75, green: 0.78, blue: 0.82)
-    private let partialColor = Color.yellow
-    private let fullColor = Color.green
     private let highlightColor = Color.orange
 
     private var filteredBacteria: [Bacterium] {
@@ -47,6 +45,7 @@ struct SpectrumPieChartView: View {
                         )
                         .frame(width: pieRadius * 2, height: pieRadius * 2)
                         .position(center)
+                        .accessibilityHidden(true)
                 }
 
                 // Draw labels outside the pie with lines
@@ -103,6 +102,7 @@ struct SpectrumPieChartView: View {
                         .lineLimit(3)
                         .frame(width: labelWidth, alignment: alignment)
                         .position(x: adjustedX, y: labelY)
+                        .accessibilityLabel("\(bacterium.name): \(sliceAccessibilityLabel(for: bacterium))")
                 }
 
                 // Category labels (outermost ring) - only on regular size
@@ -128,11 +128,14 @@ struct SpectrumPieChartView: View {
             return highlightedBacteria.contains(bacterium.id) ? highlightColor : uncoveredColor
         }
         guard let level = coverageMap[bacterium.id] else { return uncoveredColor }
-        switch level {
-        case .none: return uncoveredColor
-        case .partial: return partialColor
-        case .full: return fullColor
+        return level.displayColor
+    }
+
+    private func sliceAccessibilityLabel(for bacterium: Bacterium) -> String {
+        if !highlightedBacteria.isEmpty {
+            return highlightedBacteria.contains(bacterium.id) ? "Highlighted for selected disease" : "Not highlighted"
         }
+        return coverageMap[bacterium.id]?.accessibilityLabel ?? "No coverage data"
     }
 
     private struct CategoryLabelInfo {

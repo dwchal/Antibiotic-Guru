@@ -51,6 +51,7 @@ struct AnaerobeDetailView: View {
             Circle()
                 .fill(coverageColor(for: anaerobe.id))
                 .frame(width: 14, height: 14)
+                .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 2) {
                 Text(anaerobe.name)
                     .font(.subheadline)
@@ -64,25 +65,19 @@ struct AnaerobeDetailView: View {
             }
         }
         .padding(.vertical, 2)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(anaerobe.name), \(coverageAccessibilityLabel(for: anaerobe.id))")
     }
 
     private func coverageColor(for anaerobeId: String) -> Color {
-        guard let level = coverageMap[anaerobeId] else {
-            return Color.gray.opacity(0.4)
-        }
-        switch level {
-        case .none: return Color.gray.opacity(0.4)
-        case .partial: return .yellow
-        case .full: return .green
-        }
+        coverageMap[anaerobeId]?.displayColor ?? Color.gray.opacity(0.4)
     }
 
     private func coverageLabel(for anaerobeId: String) -> String {
-        guard let level = coverageMap[anaerobeId] else { return "" }
-        switch level {
-        case .none: return "No coverage"
-        case .partial: return "Partial"
-        case .full: return "Full"
-        }
+        coverageMap[anaerobeId]?.displayLabel ?? ""
+    }
+
+    private func coverageAccessibilityLabel(for anaerobeId: String) -> String {
+        coverageMap[anaerobeId]?.accessibilityLabel ?? "Coverage not selected"
     }
 }
