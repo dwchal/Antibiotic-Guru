@@ -4,6 +4,7 @@ struct ContentView: View {
     @State private var selectedAntibiotic: Antibiotic?
     @State private var selectedDisease: Disease?
     @State private var categoryFilter: BacteriaCategory?
+    @State private var showAnaerobeDetail = false
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     private var coverageMap: [String: CoverageLevel] {
@@ -334,15 +335,37 @@ struct ContentView: View {
         VStack(spacing: 6) {
             HStack(spacing: 8) {
                 filterButton("All", category: nil, color: .blue)
-                filterButton("Gram Positive", category: .gramPositive, color: .green)
+                filterButton("Gram Positive", category: .gramPositive, color: .purple)
                 filterButton("Gram Negative", category: .gramNegative, color: .red)
             }
             HStack(spacing: 8) {
-                filterButton("Anaerobes", category: .anaerobes, color: .orange)
-                filterButton("Atypicals", category: .atypicals, color: .purple)
+                anaerobeDetailButton
+                filterButton("Atypicals", category: .atypicals, color: .green)
             }
         }
         .padding(.horizontal)
+    }
+
+    private var anaerobeDetailButton: some View {
+        Button {
+            showAnaerobeDetail = true
+        } label: {
+            HStack(spacing: 4) {
+                Text("Anaerobes")
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 10, weight: .bold))
+            }
+            .font(.system(size: 13, weight: .semibold))
+            .foregroundColor(.orange)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
+            .background(Color.orange.opacity(0.15))
+            .cornerRadius(8)
+        }
+        .buttonStyle(.plain)
+        .sheet(isPresented: $showAnaerobeDetail) {
+            AnaerobeDetailView(selectedAntibiotic: selectedAntibiotic)
+        }
     }
 
     private func filterButton(_ title: String, category: BacteriaCategory?, color: Color) -> some View {
