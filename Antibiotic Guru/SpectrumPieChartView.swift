@@ -19,7 +19,8 @@ struct SpectrumPieChartView: View {
     }
 
     private var sliceAngle: Double {
-        360.0 / Double(filteredBacteria.count)
+        guard !filteredBacteria.isEmpty else { return 0 }
+        return 360.0 / Double(filteredBacteria.count)
     }
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -54,25 +55,9 @@ struct SpectrumPieChartView: View {
                     let midAngleDeg = startAngle + sliceAngle / 2.0
                     let midAngleRad = midAngleDeg * .pi / 180
 
-                    // Line from pie edge to label
-                    let lineStart = CGPoint(
-                        x: center.x + (pieRadius + 4) * cos(midAngleRad),
-                        y: center.y + (pieRadius + 4) * sin(midAngleRad)
-                    )
-                    let lineEnd = CGPoint(
-                        x: center.x + (pieRadius + size * 0.12) * cos(midAngleRad),
-                        y: center.y + (pieRadius + size * 0.12) * sin(midAngleRad)
-                    )
-
-                    Path { path in
-                        path.move(to: lineStart)
-                        path.addLine(to: lineEnd)
-                    }
-                    .stroke(Color.secondary.opacity(0.5), lineWidth: 1)
-
-                    // Label text
+                    // Label geometry
                     let labelRadius = pieRadius + size * (isCompact ? 0.16 : 0.18)
-                    let labelX = center.x + labelRadius * cos(midAngleRad)
+                    let naturalLabelX = center.x + labelRadius * cos(midAngleRad)
                     let labelY = center.y + labelRadius * sin(midAngleRad)
                     let fontSize: CGFloat = isCompact ? 9 : 11
                     let cosAngle = cos(midAngleRad)
@@ -81,8 +66,35 @@ struct SpectrumPieChartView: View {
                     let labelWidth: CGFloat = isCompact ? size * 0.24 : size * 0.20
                     let alignment: Alignment = isRightSide ? .leading : (isLeftSide ? .trailing : .center)
                     let textAlignment: TextAlignment = isRightSide ? .leading : (isLeftSide ? .trailing : .center)
+
+                    // Clamp labelX so the full label frame stays within the view bounds
+                    let labelX: CGFloat = {
+                        if isRightSide { return min(naturalLabelX, geo.size.width - labelWidth) }
+                        if isLeftSide { return max(naturalLabelX, labelWidth) }
+                        return naturalLabelX
+                    }()
                     // Shift the frame so the anchored edge aligns with the label point
                     let adjustedX = isRightSide ? labelX + labelWidth / 2 : (isLeftSide ? labelX - labelWidth / 2 : labelX)
+
+                    // Line from pie edge to the inner edge of the label
+                    let lineStart = CGPoint(
+                        x: center.x + (pieRadius + 4) * cos(midAngleRad),
+                        y: center.y + (pieRadius + 4) * sin(midAngleRad)
+                    )
+                    let naturalLineEndX = center.x + (pieRadius + size * 0.12) * cos(midAngleRad)
+                    let naturalLineEndY = center.y + (pieRadius + size * 0.12) * sin(midAngleRad)
+                    let lineEndX: CGFloat = {
+                        if isRightSide { return min(naturalLineEndX, labelX - 2) }
+                        if isLeftSide { return max(naturalLineEndX, labelX + 2) }
+                        return naturalLineEndX
+                    }()
+                    let lineEnd = CGPoint(x: lineEndX, y: naturalLineEndY)
+
+                    Path { path in
+                        path.move(to: lineStart)
+                        path.addLine(to: lineEnd)
+                    }
+                    .stroke(Color.secondary.opacity(0.5), lineWidth: 1)
 
                     Text(bacterium.shortName)
                         .font(.system(size: fontSize, weight: .medium))
