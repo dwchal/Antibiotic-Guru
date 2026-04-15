@@ -36,6 +36,21 @@ struct Disease: Identifiable {
     let associatedBacteria: [String]
 }
 
+
+struct ClinicalDataMetadata {
+    let version: String
+    let lastReviewedDate: String
+    let reviewer: String
+    let sourceSummary: String
+}
+
+let clinicalDataMetadata = ClinicalDataMetadata(
+    version: "2026.04",
+    lastReviewedDate: "April 15, 2026",
+    reviewer: "Local Editorial Review",
+    sourceSummary: "Educational synthesis from common antibiogram and infectious disease teaching references."
+)
+
 // MARK: - Bacteria Data
 
 let allBacteria: [Bacterium] = [

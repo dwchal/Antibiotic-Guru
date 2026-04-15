@@ -5,6 +5,8 @@ struct ContentView: View {
     @State private var selectedDisease: Disease?
     @State private var categoryFilter: BacteriaCategory?
     @State private var showAnaerobeDetail = false
+    @State private var antibioticSearchText = ""
+    @State private var diseaseSearchText = ""
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     private var coverageMap: [String: CoverageLevel] {
@@ -16,6 +18,22 @@ struct ContentView: View {
             return Set(disease.associatedBacteria)
         }
         return []
+    }
+
+    private var groupedBacteria: [(category: BacteriaCategory, bacteria: [Bacterium])] {
+        BacteriaCategory.allCases.map { category in
+            (category, allBacteria.filter { $0.category == category })
+        }
+    }
+
+    private var filteredAntibiotics: [Antibiotic] {
+        guard !antibioticSearchText.isEmpty else { return allAntibiotics }
+        return allAntibiotics.filter { $0.name.localizedCaseInsensitiveContains(antibioticSearchText) }
+    }
+
+    private var filteredDiseases: [Disease] {
+        guard !diseaseSearchText.isEmpty else { return allDiseases }
+        return allDiseases.filter { $0.name.localizedCaseInsensitiveContains(diseaseSearchText) }
     }
 
     var body: some View {
@@ -127,12 +145,23 @@ struct ContentView: View {
     }
 
     private var disclaimer: some View {
-        Text("This app is for educational purposes only. It is not a substitute for clinical judgement.")
-            .font(.caption2)
-            .foregroundColor(.secondary)
-            .multilineTextAlignment(.center)
-            .padding(.horizontal)
-            .padding(.bottom, 4)
+        VStack(spacing: 4) {
+            Text("This app is for educational purposes only. It is not a substitute for clinical judgement.")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+
+            Text("Data v\(clinicalDataMetadata.version) • Reviewed \(clinicalDataMetadata.lastReviewedDate)")
+                .font(.caption2)
+                .foregroundColor(.secondary)
+
+            Text(clinicalDataMetadata.sourceSummary)
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .padding(.horizontal)
+        .padding(.bottom, 4)
     }
 
     // MARK: - Antibiotics Sidebar (iPad/Mac)
@@ -146,7 +175,7 @@ struct ContentView: View {
 
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 0) {
-                    ForEach(allAntibiotics) { abx in
+                    ForEach(filteredAntibiotics) { abx in
                         antibioticRow(abx)
                         Divider().padding(.leading, 12)
                     }
@@ -158,14 +187,9 @@ struct ContentView: View {
     // MARK: - Antibiotics List (iPhone)
 
     private var antibioticsListPhone: some View {
-        List(allAntibiotics) { abx in
+        List(filteredAntibiotics) { abx in
             Button {
-                selectedDisease = nil
-                if selectedAntibiotic?.id == abx.id {
-                    selectedAntibiotic = nil
-                } else {
-                    selectedAntibiotic = abx
-                }
+                selectAntibiotic(abx)
             } label: {
                 HStack {
                     Text(abx.name)
@@ -178,6 +202,7 @@ struct ContentView: View {
                 }
             }
         }
+        .searchable(text: $antibioticSearchText, prompt: "Search antibiotics")
     }
 
     // MARK: - Diseases Sidebar (iPad/Mac)
@@ -191,7 +216,7 @@ struct ContentView: View {
                         .padding(.horizontal, 12)
                         .padding(.vertical, 8)
 
-                    ForEach(allDiseases) { disease in
+                    ForEach(filteredDiseases) { disease in
                         diseaseRow(disease)
                     }
                 }
@@ -209,14 +234,9 @@ struct ContentView: View {
     private var diseasesListPhone: some View {
         List {
             Section("Diseases") {
-                ForEach(allDiseases) { disease in
+                ForEach(filteredDiseases) { disease in
                     Button {
-                        selectedAntibiotic = nil
-                        if selectedDisease?.id == disease.id {
-                            selectedDisease = nil
-                        } else {
-                            selectedDisease = disease
-                        }
+                        selectDisease(disease)
                     } label: {
                         HStack {
                             Text(disease.name)
@@ -231,9 +251,9 @@ struct ContentView: View {
                 }
             }
 
-            ForEach(BacteriaCategory.allCases) { category in
-                Section(category.rawValue) {
-                    ForEach(allBacteria.filter { $0.category == category }) { bact in
+            ForEach(groupedBacteria, id: \.category) { group in
+                Section(group.category.rawValue) {
+                    ForEach(group.bacteria) { bact in
                         HStack(spacing: 8) {
                             Circle()
                                 .fill(bacteriaIndicatorColor(for: bact))
@@ -245,18 +265,14 @@ struct ContentView: View {
                 }
             }
         }
+        .searchable(text: $diseaseSearchText, prompt: "Search diseases")
     }
 
     // MARK: - Shared Row Components
 
     private func antibioticRow(_ abx: Antibiotic) -> some View {
         Button {
-            selectedDisease = nil
-            if selectedAntibiotic?.id == abx.id {
-                selectedAntibiotic = nil
-            } else {
-                selectedAntibiotic = abx
-            }
+            selectAntibiotic(abx)
         } label: {
             Text(abx.name)
                 .font(.system(size: 14))
@@ -273,12 +289,7 @@ struct ContentView: View {
 
     private func diseaseRow(_ disease: Disease) -> some View {
         Button {
-            selectedAntibiotic = nil
-            if selectedDisease?.id == disease.id {
-                selectedDisease = nil
-            } else {
-                selectedDisease = disease
-            }
+            selectDisease(disease)
         } label: {
             Text(disease.name)
                 .font(.system(size: 13))
@@ -294,13 +305,13 @@ struct ContentView: View {
     }
 
     private var bacteriaGroupsList: some View {
-        ForEach(BacteriaCategory.allCases) { category in
+        ForEach(groupedBacteria, id: \.category) { group in
             VStack(alignment: .leading, spacing: 2) {
-                Text(category.rawValue)
+                Text(group.category.rawValue)
                     .font(.subheadline.bold())
                     .padding(.horizontal, 12)
 
-                ForEach(allBacteria.filter { $0.category == category }) { bact in
+                ForEach(group.bacteria) { bact in
                     HStack(spacing: 6) {
                         Circle()
                             .fill(bacteriaIndicatorColor(for: bact))
@@ -321,12 +332,7 @@ struct ContentView: View {
         if !highlightedBacteria.isEmpty {
             return highlightedBacteria.contains(bacterium.id) ? .orange : Color.gray.opacity(0.4)
         }
-        guard let level = coverageMap[bacterium.id] else { return Color.gray.opacity(0.4) }
-        switch level {
-        case .none: return Color.gray.opacity(0.4)
-        case .partial: return .yellow
-        case .full: return .green
-        }
+        return coverageMap[bacterium.id]?.displayColor ?? Color.gray.opacity(0.4)
     }
 
     // MARK: - Filter Bar
@@ -382,6 +388,24 @@ struct ContentView: View {
                 .cornerRadius(8)
         }
         .buttonStyle(.plain)
+    }
+
+    private func selectAntibiotic(_ antibiotic: Antibiotic) {
+        selectedDisease = nil
+        if selectedAntibiotic?.id == antibiotic.id {
+            selectedAntibiotic = nil
+        } else {
+            selectedAntibiotic = antibiotic
+        }
+    }
+
+    private func selectDisease(_ disease: Disease) {
+        selectedAntibiotic = nil
+        if selectedDisease?.id == disease.id {
+            selectedDisease = nil
+        } else {
+            selectedDisease = disease
+        }
     }
 }
 
