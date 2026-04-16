@@ -7,6 +7,7 @@ struct ContentView: View {
     @State private var showAnaerobeDetail = false
     @State private var antibioticSearchText = ""
     @State private var diseaseSearchText = ""
+    @State private var showAppInfo = false
     @SceneStorage("selectedAntibioticId") private var savedAntibioticId: String?
     @SceneStorage("selectedDiseaseId") private var savedDiseaseId: String?
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -44,6 +45,9 @@ struct ContentView: View {
         .sheet(isPresented: $showAnaerobeDetail) {
             AnaerobeDetailView(selectedAntibiotic: selectedAntibiotic)
         }
+        .sheet(isPresented: $showAppInfo) {
+            AppInfoView()
+        }
     }
 
     // MARK: - Regular Layout (iPad / Mac)
@@ -77,7 +81,6 @@ struct ContentView: View {
             FilterBarView(categoryFilter: $categoryFilter, showAnaerobeDetail: $showAnaerobeDetail)
                 .padding(.vertical, 8)
                 .background(Color.gray.opacity(0.1))
-            disclaimer
         }
     }
 
@@ -87,11 +90,15 @@ struct ContentView: View {
         TabView {
             Tab("Chart", systemImage: "chart.pie") {
                 VStack(spacing: 4) {
-                    selectionHeader
+                    HStack {
+                        selectionHeader
+                        Spacer()
+                        appInfoButton
+                    }
+                    .padding(.horizontal, 12)
                     chartSection
                     FilterBarView(categoryFilter: $categoryFilter, showAnaerobeDetail: $showAnaerobeDetail)
                         .padding(.vertical, 6)
-                    disclaimer
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color(.systemBackground).ignoresSafeArea())
@@ -114,14 +121,29 @@ struct ContentView: View {
     // MARK: - Shared Components
 
     private var titleBar: some View {
-        HStack {
-            Spacer()
+        ZStack {
             Text("Antibiotic Guru")
                 .font(.title.bold())
-            Spacer()
+
+            HStack {
+                Spacer()
+                appInfoButton
+            }
         }
-        .padding(.vertical, 8)
+        .padding(.vertical, 10)
+        .padding(.horizontal, 12)
         .background(Color.gray.opacity(0.1))
+    }
+
+    private var appInfoButton: some View {
+        Button {
+            showAppInfo = true
+        } label: {
+            Image(systemName: "info.circle")
+                .font(.title3)
+                .foregroundColor(.secondary)
+                .accessibilityLabel("App information")
+        }
     }
 
     private var selectionHeader: some View {
@@ -157,26 +179,6 @@ struct ContentView: View {
         }
         .padding(.horizontal, horizontalSizeClass == .compact ? 0 : 8)
         .padding(.vertical, 8)
-    }
-
-    private var disclaimer: some View {
-        VStack(spacing: 4) {
-            Text("This app is for educational purposes only. It is not a substitute for clinical judgement.")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-
-            Text("Data v\(clinicalDataMetadata.version) • Reviewed \(clinicalDataMetadata.lastReviewedDate)")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-
-            Text(clinicalDataMetadata.sourceSummary)
-                .font(.caption2)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-        }
-        .padding(.horizontal)
-        .padding(.bottom, 4)
     }
 
     // MARK: - Phone Lists
