@@ -12,8 +12,8 @@ func validateClinicalData() {
         let coveredIds = Set(abx.coverage.keys)
         let missing = bacteriaIds.subtracting(coveredIds)
         let extra = coveredIds.subtracting(bacteriaIds)
-        assert(missing.isEmpty, "Antibiotic '\(abx.name)' missing coverage for: \(missing.sorted())")
-        assert(extra.isEmpty, "Antibiotic '\(abx.name)' has unknown bacterium IDs: \(extra.sorted())")
+        assert(missing.isEmpty, "Antibiotic '\(abx.name)' missing coverage for: \(missing.map(\.rawValue).sorted())")
+        assert(extra.isEmpty, "Antibiotic '\(abx.name)' has unknown bacterium IDs: \(extra.map(\.rawValue).sorted())")
     }
 
     // Every antibiotic with detailed anaerobe data must reference every detailed anaerobe ID
@@ -29,12 +29,12 @@ func validateClinicalData() {
     let abxIds = Set(allAntibiotics.map(\.id))
     let anaerobeAbxIds = Set(detailedAnaerobeCoverage.keys)
     let missingAnaerobe = abxIds.subtracting(anaerobeAbxIds)
-    assert(missingAnaerobe.isEmpty, "Antibiotics missing detailed anaerobe data: \(missingAnaerobe.sorted())")
+    assert(missingAnaerobe.isEmpty, "Antibiotics missing detailed anaerobe data: \(missingAnaerobe.map(\.rawValue).sorted())")
 
     // Every disease must reference valid bacterium IDs
     for disease in allDiseases {
         let invalid = Set(disease.associatedBacteria).subtracting(bacteriaIds)
-        assert(invalid.isEmpty, "Disease '\(disease.name)' references unknown bacteria: \(invalid.sorted())")
+        assert(invalid.isEmpty, "Disease '\(disease.name)' references unknown bacteria: \(invalid.map(\.rawValue).sorted())")
     }
 }
 #endif

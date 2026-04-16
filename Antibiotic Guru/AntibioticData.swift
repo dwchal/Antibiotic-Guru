@@ -17,23 +17,80 @@ enum BacteriaCategory: String, CaseIterable, Identifiable {
     var id: String { rawValue }
 }
 
+
+enum BacteriumID: String, CaseIterable, Hashable {
+    case eFaecalis
+    case eFaecium
+    case strepPneumo
+    case strepNonPneumo
+    case staphNonAureus
+    case mssa
+    case mrsa
+    case mycoplasma
+    case chlamydophila
+    case legionella
+    case anaerobesBelow
+    case anaerobesAbove
+    case pseudomonas
+    case nosocomialGN
+    case communityGN
+}
+
+enum AntibioticID: String, CaseIterable, Hashable {
+    case amikacin
+    case amoxicillin
+    case amoxicillinClav
+    case ampicillinSulb
+    case azithromycin
+    case aztreonam
+    case cefazolin
+    case cefepime
+    case cefotaxime
+    case cefotetan
+    case cefoxitin
+    case ceftazidime
+    case ceftriaxone
+    case cefuroxime
+    case ciprofloxacin
+    case clindamycin
+    case daptomycin
+    case dicloxacillin
+    case doxycycline
+    case ertapenem
+    case erythromycin
+    case gentamicin
+    case imipenem
+    case levofloxacin
+    case linezolid
+    case meropenem
+    case metronidazole
+    case moxifloxacin
+    case nafcillin
+    case nitrofurantoin
+    case penicillin
+    case pipTazo
+    case tigecycline
+    case tmpSmx
+    case tobramycin
+    case vancomycin
+}
 struct Bacterium: Identifiable {
-    let id: String
+    let id: BacteriumID
     let name: String
     let shortName: String
     let category: BacteriaCategory
 }
 
 struct Antibiotic: Identifiable {
-    let id: String
+    let id: AntibioticID
     let name: String
-    let coverage: [String: CoverageLevel]
+    let coverage: [BacteriumID: CoverageLevel]
 }
 
 struct Disease: Identifiable {
     let id: String
     let name: String
-    let associatedBacteria: [String]
+    let associatedBacteria: [BacteriumID]
 }
 
 
@@ -55,288 +112,288 @@ let clinicalDataMetadata = ClinicalDataMetadata(
 
 let allBacteria: [Bacterium] = [
     // Gram Positives (clockwise from top)
-    Bacterium(id: "eFaecalis", name: "Enterococcus faecalis", shortName: "E. faecalis", category: .gramPositive),
-    Bacterium(id: "eFaecium", name: "Enterococcus faecium", shortName: "E. faecium", category: .gramPositive),
-    Bacterium(id: "strepPneumo", name: "Streptococcus pneumoniae", shortName: "S. pneumoniae", category: .gramPositive),
-    Bacterium(id: "strepNonPneumo", name: "Streptococcus (non-pneumoniae)", shortName: "Strep (non-pneumo)", category: .gramPositive),
-    Bacterium(id: "staphNonAureus", name: "Coagulase negative Staphylococci", shortName: "CoNS", category: .gramPositive),
-    Bacterium(id: "mssa", name: "Staphylococcus aureus (MSSA)", shortName: "S. aureus (MSSA)", category: .gramPositive),
-    Bacterium(id: "mrsa", name: "Staphylococcus aureus (MRSA)", shortName: "S. aureus (MRSA)", category: .gramPositive),
+    Bacterium(id: .eFaecalis, name: "Enterococcus faecalis", shortName: "E. faecalis", category: .gramPositive),
+    Bacterium(id: .eFaecium, name: "Enterococcus faecium", shortName: "E. faecium", category: .gramPositive),
+    Bacterium(id: .strepPneumo, name: "Streptococcus pneumoniae", shortName: "S. pneumoniae", category: .gramPositive),
+    Bacterium(id: .strepNonPneumo, name: "Streptococcus (non-pneumoniae)", shortName: "Strep (non-pneumo)", category: .gramPositive),
+    Bacterium(id: .staphNonAureus, name: "Coagulase negative Staphylococci", shortName: "CoNS", category: .gramPositive),
+    Bacterium(id: .mssa, name: "Staphylococcus aureus (MSSA)", shortName: "S. aureus (MSSA)", category: .gramPositive),
+    Bacterium(id: .mrsa, name: "Staphylococcus aureus (MRSA)", shortName: "S. aureus (MRSA)", category: .gramPositive),
 
     // Atypicals
-    Bacterium(id: "mycoplasma", name: "Mycoplasma pneumoniae", shortName: "M. pneumoniae", category: .atypicals),
-    Bacterium(id: "chlamydophila", name: "Chlamydia pneumoniae", shortName: "C. pneumoniae", category: .atypicals),
-    Bacterium(id: "legionella", name: "Legionella", shortName: "Legionella", category: .atypicals),
+    Bacterium(id: .mycoplasma, name: "Mycoplasma pneumoniae", shortName: "M. pneumoniae", category: .atypicals),
+    Bacterium(id: .chlamydophila, name: "Chlamydia pneumoniae", shortName: "C. pneumoniae", category: .atypicals),
+    Bacterium(id: .legionella, name: "Legionella", shortName: "Legionella", category: .atypicals),
 
     // Anaerobes
-    Bacterium(id: "anaerobesBelow", name: "Anaerobes Below the Diaphragm", shortName: "Anaerobes\nBelow Diaphragm", category: .anaerobes),
-    Bacterium(id: "anaerobesAbove", name: "Anaerobes Above the Diaphragm", shortName: "Anaerobes\nAbove Diaphragm", category: .anaerobes),
+    Bacterium(id: .anaerobesBelow, name: "Anaerobes Below the Diaphragm", shortName: "Anaerobes\nBelow Diaphragm", category: .anaerobes),
+    Bacterium(id: .anaerobesAbove, name: "Anaerobes Above the Diaphragm", shortName: "Anaerobes\nAbove Diaphragm", category: .anaerobes),
 
     // Gram Negatives
-    Bacterium(id: "pseudomonas", name: "Pseudomonas aeruginosa", shortName: "P. aeruginosa", category: .gramNegative),
-    Bacterium(id: "nosocomialGN", name: "Nosocomial Gram Neg. (non-Pseudomonal)", shortName: "Nosocomial GN\n(non-Pseudomonal)", category: .gramNegative),
-    Bacterium(id: "communityGN", name: "Community Gram Neg. (Enterobacteriaceae)", shortName: "Community GN\n(Enterobact.)", category: .gramNegative),
+    Bacterium(id: .pseudomonas, name: "Pseudomonas aeruginosa", shortName: "P. aeruginosa", category: .gramNegative),
+    Bacterium(id: .nosocomialGN, name: "Nosocomial Gram Neg. (non-Pseudomonal)", shortName: "Nosocomial GN\n(non-Pseudomonal)", category: .gramNegative),
+    Bacterium(id: .communityGN, name: "Community Gram Neg. (Enterobacteriaceae)", shortName: "Community GN\n(Enterobact.)", category: .gramNegative),
 ]
 
 // MARK: - Antibiotic Coverage Data
 
 // Coverage helper: creates a dictionary from an array of (bacteriumId, coverageLevel) pairs
-private func cov(_ pairs: [(String, CoverageLevel)]) -> [String: CoverageLevel] {
+private func cov(_ pairs: [(BacteriumID, CoverageLevel)]) -> [BacteriumID: CoverageLevel] {
     Dictionary(uniqueKeysWithValues: pairs)
 }
 
 let allAntibiotics: [Antibiotic] = [
-    Antibiotic(id: "amikacin", name: "Amikacin", coverage: cov([
-        ("mrsa", .none), ("mssa", .none), ("staphNonAureus", .none),
-        ("strepNonPneumo", .none), ("strepPneumo", .none), ("eFaecalis", .none), ("eFaecium", .none),
-        ("communityGN", .full), ("nosocomialGN", .full), ("pseudomonas", .full),
-        ("anaerobesAbove", .none), ("anaerobesBelow", .none),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .amikacin, name: "Amikacin", coverage: cov([
+        (.mrsa, .none), (.mssa, .none), (.staphNonAureus, .none),
+        (.strepNonPneumo, .none), (.strepPneumo, .none), (.eFaecalis, .none), (.eFaecium, .none),
+        (.communityGN, .full), (.nosocomialGN, .full), (.pseudomonas, .full),
+        (.anaerobesAbove, .none), (.anaerobesBelow, .none),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "amoxicillin", name: "Amoxicillin", coverage: cov([
-        ("mrsa", .none), ("mssa", .none), ("staphNonAureus", .none),
-        ("strepNonPneumo", .full), ("strepPneumo", .full), ("eFaecalis", .full), ("eFaecium", .none),
-        ("communityGN", .partial), ("nosocomialGN", .none), ("pseudomonas", .none),
-        ("anaerobesAbove", .partial), ("anaerobesBelow", .none),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .amoxicillin, name: "Amoxicillin", coverage: cov([
+        (.mrsa, .none), (.mssa, .none), (.staphNonAureus, .none),
+        (.strepNonPneumo, .full), (.strepPneumo, .full), (.eFaecalis, .full), (.eFaecium, .none),
+        (.communityGN, .partial), (.nosocomialGN, .none), (.pseudomonas, .none),
+        (.anaerobesAbove, .partial), (.anaerobesBelow, .none),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "amoxicillinClav", name: "Amoxicillin Clavulanate", coverage: cov([
-        ("mrsa", .none), ("mssa", .full), ("staphNonAureus", .full),
-        ("strepNonPneumo", .full), ("strepPneumo", .full), ("eFaecalis", .full), ("eFaecium", .none),
-        ("communityGN", .full), ("nosocomialGN", .none), ("pseudomonas", .none),
-        ("anaerobesAbove", .full), ("anaerobesBelow", .full),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .amoxicillinClav, name: "Amoxicillin Clavulanate", coverage: cov([
+        (.mrsa, .none), (.mssa, .full), (.staphNonAureus, .full),
+        (.strepNonPneumo, .full), (.strepPneumo, .full), (.eFaecalis, .full), (.eFaecium, .none),
+        (.communityGN, .full), (.nosocomialGN, .none), (.pseudomonas, .none),
+        (.anaerobesAbove, .full), (.anaerobesBelow, .full),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "ampicillinSulb", name: "Ampicillin Sulbactam", coverage: cov([
-        ("mrsa", .none), ("mssa", .full), ("staphNonAureus", .full),
-        ("strepNonPneumo", .full), ("strepPneumo", .full), ("eFaecalis", .full), ("eFaecium", .none),
-        ("communityGN", .full), ("nosocomialGN", .partial), ("pseudomonas", .none),
-        ("anaerobesAbove", .full), ("anaerobesBelow", .full),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .ampicillinSulb, name: "Ampicillin Sulbactam", coverage: cov([
+        (.mrsa, .none), (.mssa, .full), (.staphNonAureus, .full),
+        (.strepNonPneumo, .full), (.strepPneumo, .full), (.eFaecalis, .full), (.eFaecium, .none),
+        (.communityGN, .full), (.nosocomialGN, .partial), (.pseudomonas, .none),
+        (.anaerobesAbove, .full), (.anaerobesBelow, .full),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "azithromycin", name: "Azithromycin", coverage: cov([
-        ("mrsa", .none), ("mssa", .partial), ("staphNonAureus", .none),
-        ("strepNonPneumo", .partial), ("strepPneumo", .full), ("eFaecalis", .none), ("eFaecium", .none),
-        ("communityGN", .partial), ("nosocomialGN", .none), ("pseudomonas", .none),
-        ("anaerobesAbove", .none), ("anaerobesBelow", .none),
-        ("mycoplasma", .full), ("chlamydophila", .full), ("legionella", .full)
+    Antibiotic(id: .azithromycin, name: "Azithromycin", coverage: cov([
+        (.mrsa, .none), (.mssa, .partial), (.staphNonAureus, .none),
+        (.strepNonPneumo, .partial), (.strepPneumo, .full), (.eFaecalis, .none), (.eFaecium, .none),
+        (.communityGN, .partial), (.nosocomialGN, .none), (.pseudomonas, .none),
+        (.anaerobesAbove, .none), (.anaerobesBelow, .none),
+        (.mycoplasma, .full), (.chlamydophila, .full), (.legionella, .full)
     ])),
-    Antibiotic(id: "aztreonam", name: "Aztreonam", coverage: cov([
-        ("mrsa", .none), ("mssa", .none), ("staphNonAureus", .none),
-        ("strepNonPneumo", .none), ("strepPneumo", .none), ("eFaecalis", .none), ("eFaecium", .none),
-        ("communityGN", .full), ("nosocomialGN", .full), ("pseudomonas", .full),
-        ("anaerobesAbove", .none), ("anaerobesBelow", .none),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .aztreonam, name: "Aztreonam", coverage: cov([
+        (.mrsa, .none), (.mssa, .none), (.staphNonAureus, .none),
+        (.strepNonPneumo, .none), (.strepPneumo, .none), (.eFaecalis, .none), (.eFaecium, .none),
+        (.communityGN, .full), (.nosocomialGN, .full), (.pseudomonas, .full),
+        (.anaerobesAbove, .none), (.anaerobesBelow, .none),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "cefazolin", name: "Cefazolin", coverage: cov([
-        ("mrsa", .none), ("mssa", .full), ("staphNonAureus", .full),
-        ("strepNonPneumo", .full), ("strepPneumo", .partial), ("eFaecalis", .none), ("eFaecium", .none),
-        ("communityGN", .partial), ("nosocomialGN", .none), ("pseudomonas", .none),
-        ("anaerobesAbove", .none), ("anaerobesBelow", .none),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .cefazolin, name: "Cefazolin", coverage: cov([
+        (.mrsa, .none), (.mssa, .full), (.staphNonAureus, .full),
+        (.strepNonPneumo, .full), (.strepPneumo, .partial), (.eFaecalis, .none), (.eFaecium, .none),
+        (.communityGN, .partial), (.nosocomialGN, .none), (.pseudomonas, .none),
+        (.anaerobesAbove, .none), (.anaerobesBelow, .none),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "cefepime", name: "Cefepime", coverage: cov([
-        ("mrsa", .none), ("mssa", .full), ("staphNonAureus", .full),
-        ("strepNonPneumo", .full), ("strepPneumo", .full), ("eFaecalis", .none), ("eFaecium", .none),
-        ("communityGN", .full), ("nosocomialGN", .full), ("pseudomonas", .full),
-        ("anaerobesAbove", .none), ("anaerobesBelow", .none),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .cefepime, name: "Cefepime", coverage: cov([
+        (.mrsa, .none), (.mssa, .full), (.staphNonAureus, .full),
+        (.strepNonPneumo, .full), (.strepPneumo, .full), (.eFaecalis, .none), (.eFaecium, .none),
+        (.communityGN, .full), (.nosocomialGN, .full), (.pseudomonas, .full),
+        (.anaerobesAbove, .none), (.anaerobesBelow, .none),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "cefotaxime", name: "Cefotaxime", coverage: cov([
-        ("mrsa", .none), ("mssa", .full), ("staphNonAureus", .partial),
-        ("strepNonPneumo", .full), ("strepPneumo", .full), ("eFaecalis", .none), ("eFaecium", .none),
-        ("communityGN", .full), ("nosocomialGN", .partial), ("pseudomonas", .none),
-        ("anaerobesAbove", .none), ("anaerobesBelow", .none),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .cefotaxime, name: "Cefotaxime", coverage: cov([
+        (.mrsa, .none), (.mssa, .full), (.staphNonAureus, .partial),
+        (.strepNonPneumo, .full), (.strepPneumo, .full), (.eFaecalis, .none), (.eFaecium, .none),
+        (.communityGN, .full), (.nosocomialGN, .partial), (.pseudomonas, .none),
+        (.anaerobesAbove, .none), (.anaerobesBelow, .none),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "cefotetan", name: "Cefotetan", coverage: cov([
-        ("mrsa", .none), ("mssa", .partial), ("staphNonAureus", .partial),
-        ("strepNonPneumo", .partial), ("strepPneumo", .partial), ("eFaecalis", .none), ("eFaecium", .none),
-        ("communityGN", .full), ("nosocomialGN", .partial), ("pseudomonas", .none),
-        ("anaerobesAbove", .partial), ("anaerobesBelow", .full),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .cefotetan, name: "Cefotetan", coverage: cov([
+        (.mrsa, .none), (.mssa, .partial), (.staphNonAureus, .partial),
+        (.strepNonPneumo, .partial), (.strepPneumo, .partial), (.eFaecalis, .none), (.eFaecium, .none),
+        (.communityGN, .full), (.nosocomialGN, .partial), (.pseudomonas, .none),
+        (.anaerobesAbove, .partial), (.anaerobesBelow, .full),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "cefoxitin", name: "Cefoxitin", coverage: cov([
-        ("mrsa", .none), ("mssa", .partial), ("staphNonAureus", .partial),
-        ("strepNonPneumo", .partial), ("strepPneumo", .partial), ("eFaecalis", .none), ("eFaecium", .none),
-        ("communityGN", .full), ("nosocomialGN", .partial), ("pseudomonas", .none),
-        ("anaerobesAbove", .partial), ("anaerobesBelow", .full),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .cefoxitin, name: "Cefoxitin", coverage: cov([
+        (.mrsa, .none), (.mssa, .partial), (.staphNonAureus, .partial),
+        (.strepNonPneumo, .partial), (.strepPneumo, .partial), (.eFaecalis, .none), (.eFaecium, .none),
+        (.communityGN, .full), (.nosocomialGN, .partial), (.pseudomonas, .none),
+        (.anaerobesAbove, .partial), (.anaerobesBelow, .full),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "ceftazidime", name: "Ceftazidime", coverage: cov([
-        ("mrsa", .none), ("mssa", .partial), ("staphNonAureus", .partial),
-        ("strepNonPneumo", .partial), ("strepPneumo", .partial), ("eFaecalis", .none), ("eFaecium", .none),
-        ("communityGN", .full), ("nosocomialGN", .full), ("pseudomonas", .full),
-        ("anaerobesAbove", .none), ("anaerobesBelow", .none),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .ceftazidime, name: "Ceftazidime", coverage: cov([
+        (.mrsa, .none), (.mssa, .partial), (.staphNonAureus, .partial),
+        (.strepNonPneumo, .partial), (.strepPneumo, .partial), (.eFaecalis, .none), (.eFaecium, .none),
+        (.communityGN, .full), (.nosocomialGN, .full), (.pseudomonas, .full),
+        (.anaerobesAbove, .none), (.anaerobesBelow, .none),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "ceftriaxone", name: "Ceftriaxone", coverage: cov([
-        ("mrsa", .none), ("mssa", .full), ("staphNonAureus", .partial),
-        ("strepNonPneumo", .full), ("strepPneumo", .full), ("eFaecalis", .none), ("eFaecium", .none),
-        ("communityGN", .full), ("nosocomialGN", .partial), ("pseudomonas", .none),
-        ("anaerobesAbove", .none), ("anaerobesBelow", .none),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .ceftriaxone, name: "Ceftriaxone", coverage: cov([
+        (.mrsa, .none), (.mssa, .full), (.staphNonAureus, .partial),
+        (.strepNonPneumo, .full), (.strepPneumo, .full), (.eFaecalis, .none), (.eFaecium, .none),
+        (.communityGN, .full), (.nosocomialGN, .partial), (.pseudomonas, .none),
+        (.anaerobesAbove, .none), (.anaerobesBelow, .none),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "cefuroxime", name: "Cefuroxime", coverage: cov([
-        ("mrsa", .none), ("mssa", .full), ("staphNonAureus", .partial),
-        ("strepNonPneumo", .full), ("strepPneumo", .full), ("eFaecalis", .none), ("eFaecium", .none),
-        ("communityGN", .full), ("nosocomialGN", .none), ("pseudomonas", .none),
-        ("anaerobesAbove", .none), ("anaerobesBelow", .none),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .cefuroxime, name: "Cefuroxime", coverage: cov([
+        (.mrsa, .none), (.mssa, .full), (.staphNonAureus, .partial),
+        (.strepNonPneumo, .full), (.strepPneumo, .full), (.eFaecalis, .none), (.eFaecium, .none),
+        (.communityGN, .full), (.nosocomialGN, .none), (.pseudomonas, .none),
+        (.anaerobesAbove, .none), (.anaerobesBelow, .none),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "ciprofloxacin", name: "Ciprofloxacin", coverage: cov([
-        ("mrsa", .none), ("mssa", .partial), ("staphNonAureus", .partial),
-        ("strepNonPneumo", .none), ("strepPneumo", .none), ("eFaecalis", .none), ("eFaecium", .none),
-        ("communityGN", .full), ("nosocomialGN", .full), ("pseudomonas", .full),
-        ("anaerobesAbove", .none), ("anaerobesBelow", .none),
-        ("mycoplasma", .partial), ("chlamydophila", .full), ("legionella", .full)
+    Antibiotic(id: .ciprofloxacin, name: "Ciprofloxacin", coverage: cov([
+        (.mrsa, .none), (.mssa, .partial), (.staphNonAureus, .partial),
+        (.strepNonPneumo, .none), (.strepPneumo, .none), (.eFaecalis, .none), (.eFaecium, .none),
+        (.communityGN, .full), (.nosocomialGN, .full), (.pseudomonas, .full),
+        (.anaerobesAbove, .none), (.anaerobesBelow, .none),
+        (.mycoplasma, .partial), (.chlamydophila, .full), (.legionella, .full)
     ])),
-    Antibiotic(id: "clindamycin", name: "Clindamycin", coverage: cov([
-        ("mrsa", .partial), ("mssa", .full), ("staphNonAureus", .full),
-        ("strepNonPneumo", .full), ("strepPneumo", .full), ("eFaecalis", .none), ("eFaecium", .none),
-        ("communityGN", .none), ("nosocomialGN", .none), ("pseudomonas", .none),
-        ("anaerobesAbove", .full), ("anaerobesBelow", .partial),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .clindamycin, name: "Clindamycin", coverage: cov([
+        (.mrsa, .partial), (.mssa, .full), (.staphNonAureus, .full),
+        (.strepNonPneumo, .full), (.strepPneumo, .full), (.eFaecalis, .none), (.eFaecium, .none),
+        (.communityGN, .none), (.nosocomialGN, .none), (.pseudomonas, .none),
+        (.anaerobesAbove, .full), (.anaerobesBelow, .partial),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "daptomycin", name: "Daptomycin", coverage: cov([
-        ("mrsa", .full), ("mssa", .full), ("staphNonAureus", .full),
-        ("strepNonPneumo", .full), ("strepPneumo", .full), ("eFaecalis", .full), ("eFaecium", .full),
-        ("communityGN", .none), ("nosocomialGN", .none), ("pseudomonas", .none),
-        ("anaerobesAbove", .none), ("anaerobesBelow", .none),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .daptomycin, name: "Daptomycin", coverage: cov([
+        (.mrsa, .full), (.mssa, .full), (.staphNonAureus, .full),
+        (.strepNonPneumo, .full), (.strepPneumo, .full), (.eFaecalis, .full), (.eFaecium, .full),
+        (.communityGN, .none), (.nosocomialGN, .none), (.pseudomonas, .none),
+        (.anaerobesAbove, .none), (.anaerobesBelow, .none),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "dicloxacillin", name: "Dicloxacillin", coverage: cov([
-        ("mrsa", .none), ("mssa", .full), ("staphNonAureus", .full),
-        ("strepNonPneumo", .full), ("strepPneumo", .partial), ("eFaecalis", .none), ("eFaecium", .none),
-        ("communityGN", .none), ("nosocomialGN", .none), ("pseudomonas", .none),
-        ("anaerobesAbove", .none), ("anaerobesBelow", .none),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .dicloxacillin, name: "Dicloxacillin", coverage: cov([
+        (.mrsa, .none), (.mssa, .full), (.staphNonAureus, .full),
+        (.strepNonPneumo, .full), (.strepPneumo, .partial), (.eFaecalis, .none), (.eFaecium, .none),
+        (.communityGN, .none), (.nosocomialGN, .none), (.pseudomonas, .none),
+        (.anaerobesAbove, .none), (.anaerobesBelow, .none),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "doxycycline", name: "Doxycycline", coverage: cov([
-        ("mrsa", .partial), ("mssa", .partial), ("staphNonAureus", .partial),
-        ("strepNonPneumo", .partial), ("strepPneumo", .partial), ("eFaecalis", .none), ("eFaecium", .none),
-        ("communityGN", .partial), ("nosocomialGN", .none), ("pseudomonas", .none),
-        ("anaerobesAbove", .partial), ("anaerobesBelow", .none),
-        ("mycoplasma", .full), ("chlamydophila", .full), ("legionella", .partial)
+    Antibiotic(id: .doxycycline, name: "Doxycycline", coverage: cov([
+        (.mrsa, .partial), (.mssa, .partial), (.staphNonAureus, .partial),
+        (.strepNonPneumo, .partial), (.strepPneumo, .partial), (.eFaecalis, .none), (.eFaecium, .none),
+        (.communityGN, .partial), (.nosocomialGN, .none), (.pseudomonas, .none),
+        (.anaerobesAbove, .partial), (.anaerobesBelow, .none),
+        (.mycoplasma, .full), (.chlamydophila, .full), (.legionella, .partial)
     ])),
-    Antibiotic(id: "ertapenem", name: "Ertapenem", coverage: cov([
-        ("mrsa", .none), ("mssa", .full), ("staphNonAureus", .full),
-        ("strepNonPneumo", .full), ("strepPneumo", .full), ("eFaecalis", .none), ("eFaecium", .none),
-        ("communityGN", .full), ("nosocomialGN", .full), ("pseudomonas", .none),
-        ("anaerobesAbove", .full), ("anaerobesBelow", .full),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .ertapenem, name: "Ertapenem", coverage: cov([
+        (.mrsa, .none), (.mssa, .full), (.staphNonAureus, .full),
+        (.strepNonPneumo, .full), (.strepPneumo, .full), (.eFaecalis, .none), (.eFaecium, .none),
+        (.communityGN, .full), (.nosocomialGN, .full), (.pseudomonas, .none),
+        (.anaerobesAbove, .full), (.anaerobesBelow, .full),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "erythromycin", name: "Erythromycin", coverage: cov([
-        ("mrsa", .none), ("mssa", .partial), ("staphNonAureus", .partial),
-        ("strepNonPneumo", .partial), ("strepPneumo", .full), ("eFaecalis", .none), ("eFaecium", .none),
-        ("communityGN", .none), ("nosocomialGN", .none), ("pseudomonas", .none),
-        ("anaerobesAbove", .none), ("anaerobesBelow", .none),
-        ("mycoplasma", .full), ("chlamydophila", .full), ("legionella", .full)
+    Antibiotic(id: .erythromycin, name: "Erythromycin", coverage: cov([
+        (.mrsa, .none), (.mssa, .partial), (.staphNonAureus, .partial),
+        (.strepNonPneumo, .partial), (.strepPneumo, .full), (.eFaecalis, .none), (.eFaecium, .none),
+        (.communityGN, .none), (.nosocomialGN, .none), (.pseudomonas, .none),
+        (.anaerobesAbove, .none), (.anaerobesBelow, .none),
+        (.mycoplasma, .full), (.chlamydophila, .full), (.legionella, .full)
     ])),
-    Antibiotic(id: "gentamicin", name: "Gentamicin", coverage: cov([
-        ("mrsa", .none), ("mssa", .none), ("staphNonAureus", .none),
-        ("strepNonPneumo", .none), ("strepPneumo", .none), ("eFaecalis", .none), ("eFaecium", .none),
-        ("communityGN", .full), ("nosocomialGN", .full), ("pseudomonas", .partial),
-        ("anaerobesAbove", .none), ("anaerobesBelow", .none),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .gentamicin, name: "Gentamicin", coverage: cov([
+        (.mrsa, .none), (.mssa, .none), (.staphNonAureus, .none),
+        (.strepNonPneumo, .none), (.strepPneumo, .none), (.eFaecalis, .none), (.eFaecium, .none),
+        (.communityGN, .full), (.nosocomialGN, .full), (.pseudomonas, .partial),
+        (.anaerobesAbove, .none), (.anaerobesBelow, .none),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "imipenem", name: "Imipenem", coverage: cov([
-        ("mrsa", .none), ("mssa", .full), ("staphNonAureus", .full),
-        ("strepNonPneumo", .full), ("strepPneumo", .full), ("eFaecalis", .full), ("eFaecium", .none),
-        ("communityGN", .full), ("nosocomialGN", .full), ("pseudomonas", .full),
-        ("anaerobesAbove", .full), ("anaerobesBelow", .full),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .imipenem, name: "Imipenem", coverage: cov([
+        (.mrsa, .none), (.mssa, .full), (.staphNonAureus, .full),
+        (.strepNonPneumo, .full), (.strepPneumo, .full), (.eFaecalis, .full), (.eFaecium, .none),
+        (.communityGN, .full), (.nosocomialGN, .full), (.pseudomonas, .full),
+        (.anaerobesAbove, .full), (.anaerobesBelow, .full),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "levofloxacin", name: "Levofloxacin", coverage: cov([
-        ("mrsa", .none), ("mssa", .partial), ("staphNonAureus", .partial),
-        ("strepNonPneumo", .full), ("strepPneumo", .full), ("eFaecalis", .none), ("eFaecium", .none),
-        ("communityGN", .full), ("nosocomialGN", .full), ("pseudomonas", .full),
-        ("anaerobesAbove", .none), ("anaerobesBelow", .none),
-        ("mycoplasma", .full), ("chlamydophila", .full), ("legionella", .full)
+    Antibiotic(id: .levofloxacin, name: "Levofloxacin", coverage: cov([
+        (.mrsa, .none), (.mssa, .partial), (.staphNonAureus, .partial),
+        (.strepNonPneumo, .full), (.strepPneumo, .full), (.eFaecalis, .none), (.eFaecium, .none),
+        (.communityGN, .full), (.nosocomialGN, .full), (.pseudomonas, .full),
+        (.anaerobesAbove, .none), (.anaerobesBelow, .none),
+        (.mycoplasma, .full), (.chlamydophila, .full), (.legionella, .full)
     ])),
-    Antibiotic(id: "linezolid", name: "Linezolid", coverage: cov([
-        ("mrsa", .full), ("mssa", .full), ("staphNonAureus", .full),
-        ("strepNonPneumo", .full), ("strepPneumo", .full), ("eFaecalis", .full), ("eFaecium", .full),
-        ("communityGN", .none), ("nosocomialGN", .none), ("pseudomonas", .none),
-        ("anaerobesAbove", .partial), ("anaerobesBelow", .none),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .linezolid, name: "Linezolid", coverage: cov([
+        (.mrsa, .full), (.mssa, .full), (.staphNonAureus, .full),
+        (.strepNonPneumo, .full), (.strepPneumo, .full), (.eFaecalis, .full), (.eFaecium, .full),
+        (.communityGN, .none), (.nosocomialGN, .none), (.pseudomonas, .none),
+        (.anaerobesAbove, .partial), (.anaerobesBelow, .none),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "meropenem", name: "Meropenem", coverage: cov([
-        ("mrsa", .none), ("mssa", .full), ("staphNonAureus", .full),
-        ("strepNonPneumo", .full), ("strepPneumo", .full), ("eFaecalis", .partial), ("eFaecium", .none),
-        ("communityGN", .full), ("nosocomialGN", .full), ("pseudomonas", .full),
-        ("anaerobesAbove", .full), ("anaerobesBelow", .full),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .meropenem, name: "Meropenem", coverage: cov([
+        (.mrsa, .none), (.mssa, .full), (.staphNonAureus, .full),
+        (.strepNonPneumo, .full), (.strepPneumo, .full), (.eFaecalis, .partial), (.eFaecium, .none),
+        (.communityGN, .full), (.nosocomialGN, .full), (.pseudomonas, .full),
+        (.anaerobesAbove, .full), (.anaerobesBelow, .full),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "metronidazole", name: "Metronidazole", coverage: cov([
-        ("mrsa", .none), ("mssa", .none), ("staphNonAureus", .none),
-        ("strepNonPneumo", .none), ("strepPneumo", .none), ("eFaecalis", .none), ("eFaecium", .none),
-        ("communityGN", .none), ("nosocomialGN", .none), ("pseudomonas", .none),
-        ("anaerobesAbove", .full), ("anaerobesBelow", .full),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .metronidazole, name: "Metronidazole", coverage: cov([
+        (.mrsa, .none), (.mssa, .none), (.staphNonAureus, .none),
+        (.strepNonPneumo, .none), (.strepPneumo, .none), (.eFaecalis, .none), (.eFaecium, .none),
+        (.communityGN, .none), (.nosocomialGN, .none), (.pseudomonas, .none),
+        (.anaerobesAbove, .full), (.anaerobesBelow, .full),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "moxifloxacin", name: "Moxifloxacin", coverage: cov([
-        ("mrsa", .none), ("mssa", .partial), ("staphNonAureus", .partial),
-        ("strepNonPneumo", .full), ("strepPneumo", .full), ("eFaecalis", .none), ("eFaecium", .none),
-        ("communityGN", .full), ("nosocomialGN", .partial), ("pseudomonas", .none),
-        ("anaerobesAbove", .full), ("anaerobesBelow", .partial),
-        ("mycoplasma", .full), ("chlamydophila", .full), ("legionella", .full)
+    Antibiotic(id: .moxifloxacin, name: "Moxifloxacin", coverage: cov([
+        (.mrsa, .none), (.mssa, .partial), (.staphNonAureus, .partial),
+        (.strepNonPneumo, .full), (.strepPneumo, .full), (.eFaecalis, .none), (.eFaecium, .none),
+        (.communityGN, .full), (.nosocomialGN, .partial), (.pseudomonas, .none),
+        (.anaerobesAbove, .full), (.anaerobesBelow, .partial),
+        (.mycoplasma, .full), (.chlamydophila, .full), (.legionella, .full)
     ])),
-    Antibiotic(id: "nafcillin", name: "Nafcillin", coverage: cov([
-        ("mrsa", .none), ("mssa", .full), ("staphNonAureus", .full),
-        ("strepNonPneumo", .full), ("strepPneumo", .partial), ("eFaecalis", .none), ("eFaecium", .none),
-        ("communityGN", .none), ("nosocomialGN", .none), ("pseudomonas", .none),
-        ("anaerobesAbove", .none), ("anaerobesBelow", .none),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .nafcillin, name: "Nafcillin", coverage: cov([
+        (.mrsa, .none), (.mssa, .full), (.staphNonAureus, .full),
+        (.strepNonPneumo, .full), (.strepPneumo, .partial), (.eFaecalis, .none), (.eFaecium, .none),
+        (.communityGN, .none), (.nosocomialGN, .none), (.pseudomonas, .none),
+        (.anaerobesAbove, .none), (.anaerobesBelow, .none),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "nitrofurantoin", name: "Nitrofurantoin", coverage: cov([
-        ("mrsa", .partial), ("mssa", .partial), ("staphNonAureus", .partial),
-        ("strepNonPneumo", .partial), ("strepPneumo", .none), ("eFaecalis", .full), ("eFaecium", .partial),
-        ("communityGN", .partial), ("nosocomialGN", .none), ("pseudomonas", .none),
-        ("anaerobesAbove", .none), ("anaerobesBelow", .none),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .nitrofurantoin, name: "Nitrofurantoin", coverage: cov([
+        (.mrsa, .partial), (.mssa, .partial), (.staphNonAureus, .partial),
+        (.strepNonPneumo, .partial), (.strepPneumo, .none), (.eFaecalis, .full), (.eFaecium, .partial),
+        (.communityGN, .partial), (.nosocomialGN, .none), (.pseudomonas, .none),
+        (.anaerobesAbove, .none), (.anaerobesBelow, .none),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "penicillin", name: "Penicillin", coverage: cov([
-        ("mrsa", .none), ("mssa", .none), ("staphNonAureus", .none),
-        ("strepNonPneumo", .full), ("strepPneumo", .full), ("eFaecalis", .partial), ("eFaecium", .none),
-        ("communityGN", .none), ("nosocomialGN", .none), ("pseudomonas", .none),
-        ("anaerobesAbove", .full), ("anaerobesBelow", .none),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .penicillin, name: "Penicillin", coverage: cov([
+        (.mrsa, .none), (.mssa, .none), (.staphNonAureus, .none),
+        (.strepNonPneumo, .full), (.strepPneumo, .full), (.eFaecalis, .partial), (.eFaecium, .none),
+        (.communityGN, .none), (.nosocomialGN, .none), (.pseudomonas, .none),
+        (.anaerobesAbove, .full), (.anaerobesBelow, .none),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "pipTazo", name: "Piperacillin Tazobactam", coverage: cov([
-        ("mrsa", .none), ("mssa", .full), ("staphNonAureus", .full),
-        ("strepNonPneumo", .full), ("strepPneumo", .full), ("eFaecalis", .full), ("eFaecium", .none),
-        ("communityGN", .full), ("nosocomialGN", .full), ("pseudomonas", .full),
-        ("anaerobesAbove", .full), ("anaerobesBelow", .full),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .pipTazo, name: "Piperacillin Tazobactam", coverage: cov([
+        (.mrsa, .none), (.mssa, .full), (.staphNonAureus, .full),
+        (.strepNonPneumo, .full), (.strepPneumo, .full), (.eFaecalis, .full), (.eFaecium, .none),
+        (.communityGN, .full), (.nosocomialGN, .full), (.pseudomonas, .full),
+        (.anaerobesAbove, .full), (.anaerobesBelow, .full),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "tigecycline", name: "Tigecycline", coverage: cov([
-        ("mrsa", .full), ("mssa", .full), ("staphNonAureus", .full),
-        ("strepNonPneumo", .full), ("strepPneumo", .full), ("eFaecalis", .partial), ("eFaecium", .partial),
-        ("communityGN", .full), ("nosocomialGN", .partial), ("pseudomonas", .none),
-        ("anaerobesAbove", .full), ("anaerobesBelow", .full),
-        ("mycoplasma", .partial), ("chlamydophila", .partial), ("legionella", .none)
+    Antibiotic(id: .tigecycline, name: "Tigecycline", coverage: cov([
+        (.mrsa, .full), (.mssa, .full), (.staphNonAureus, .full),
+        (.strepNonPneumo, .full), (.strepPneumo, .full), (.eFaecalis, .partial), (.eFaecium, .partial),
+        (.communityGN, .full), (.nosocomialGN, .partial), (.pseudomonas, .none),
+        (.anaerobesAbove, .full), (.anaerobesBelow, .full),
+        (.mycoplasma, .partial), (.chlamydophila, .partial), (.legionella, .none)
     ])),
-    Antibiotic(id: "tmpSmx", name: "TMP-SMX", coverage: cov([
-        ("mrsa", .full), ("mssa", .full), ("staphNonAureus", .full),
-        ("strepNonPneumo", .partial), ("strepPneumo", .full), ("eFaecalis", .none), ("eFaecium", .none),
-        ("communityGN", .full), ("nosocomialGN", .partial), ("pseudomonas", .none),
-        ("anaerobesAbove", .none), ("anaerobesBelow", .none),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .tmpSmx, name: "TMP-SMX", coverage: cov([
+        (.mrsa, .full), (.mssa, .full), (.staphNonAureus, .full),
+        (.strepNonPneumo, .partial), (.strepPneumo, .full), (.eFaecalis, .none), (.eFaecium, .none),
+        (.communityGN, .full), (.nosocomialGN, .partial), (.pseudomonas, .none),
+        (.anaerobesAbove, .none), (.anaerobesBelow, .none),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "tobramycin", name: "Tobramycin", coverage: cov([
-        ("mrsa", .none), ("mssa", .none), ("staphNonAureus", .none),
-        ("strepNonPneumo", .none), ("strepPneumo", .none), ("eFaecalis", .none), ("eFaecium", .none),
-        ("communityGN", .full), ("nosocomialGN", .full), ("pseudomonas", .full),
-        ("anaerobesAbove", .none), ("anaerobesBelow", .none),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .tobramycin, name: "Tobramycin", coverage: cov([
+        (.mrsa, .none), (.mssa, .none), (.staphNonAureus, .none),
+        (.strepNonPneumo, .none), (.strepPneumo, .none), (.eFaecalis, .none), (.eFaecium, .none),
+        (.communityGN, .full), (.nosocomialGN, .full), (.pseudomonas, .full),
+        (.anaerobesAbove, .none), (.anaerobesBelow, .none),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
-    Antibiotic(id: "vancomycin", name: "Vancomycin", coverage: cov([
-        ("mrsa", .full), ("mssa", .full), ("staphNonAureus", .full),
-        ("strepNonPneumo", .full), ("strepPneumo", .full), ("eFaecalis", .full), ("eFaecium", .partial),
-        ("communityGN", .none), ("nosocomialGN", .none), ("pseudomonas", .none),
-        ("anaerobesAbove", .partial), ("anaerobesBelow", .none),
-        ("mycoplasma", .none), ("chlamydophila", .none), ("legionella", .none)
+    Antibiotic(id: .vancomycin, name: "Vancomycin", coverage: cov([
+        (.mrsa, .full), (.mssa, .full), (.staphNonAureus, .full),
+        (.strepNonPneumo, .full), (.strepPneumo, .full), (.eFaecalis, .full), (.eFaecium, .partial),
+        (.communityGN, .none), (.nosocomialGN, .none), (.pseudomonas, .none),
+        (.anaerobesAbove, .partial), (.anaerobesBelow, .none),
+        (.mycoplasma, .none), (.chlamydophila, .none), (.legionella, .none)
     ])),
 ]
 
@@ -375,148 +432,148 @@ private func anaerobeCov(_ pairs: [(String, CoverageLevel)]) -> [String: Coverag
 }
 
 /// Detailed anaerobe coverage keyed by antibiotic ID
-let detailedAnaerobeCoverage: [String: [String: CoverageLevel]] = [
-    "amikacin": anaerobeCov([
+let detailedAnaerobeCoverage: [AntibioticID: [String: CoverageLevel]] = [
+    .amikacin: anaerobeCov([
         ("bFragilis", .none), ("fNecrophorum", .none), ("prevotella", .none),
         ("actinomyces", .none), ("clostridium", .none), ("cAcnes", .none), ("peptostreptococci", .none)
     ]),
-    "amoxicillin": anaerobeCov([
+    .amoxicillin: anaerobeCov([
         ("bFragilis", .none), ("fNecrophorum", .full), ("prevotella", .partial),
         ("actinomyces", .full), ("clostridium", .full), ("cAcnes", .full), ("peptostreptococci", .full)
     ]),
-    "amoxicillinClav": anaerobeCov([
+    .amoxicillinClav: anaerobeCov([
         ("bFragilis", .full), ("fNecrophorum", .full), ("prevotella", .full),
         ("actinomyces", .full), ("clostridium", .full), ("cAcnes", .full), ("peptostreptococci", .full)
     ]),
-    "ampicillinSulb": anaerobeCov([
+    .ampicillinSulb: anaerobeCov([
         ("bFragilis", .full), ("fNecrophorum", .full), ("prevotella", .full),
         ("actinomyces", .full), ("clostridium", .full), ("cAcnes", .full), ("peptostreptococci", .full)
     ]),
-    "azithromycin": anaerobeCov([
+    .azithromycin: anaerobeCov([
         ("bFragilis", .none), ("fNecrophorum", .none), ("prevotella", .none),
         ("actinomyces", .none), ("clostridium", .none), ("cAcnes", .partial), ("peptostreptococci", .none)
     ]),
-    "aztreonam": anaerobeCov([
+    .aztreonam: anaerobeCov([
         ("bFragilis", .none), ("fNecrophorum", .none), ("prevotella", .none),
         ("actinomyces", .none), ("clostridium", .none), ("cAcnes", .none), ("peptostreptococci", .none)
     ]),
-    "cefazolin": anaerobeCov([
+    .cefazolin: anaerobeCov([
         ("bFragilis", .none), ("fNecrophorum", .none), ("prevotella", .none),
         ("actinomyces", .partial), ("clostridium", .none), ("cAcnes", .full), ("peptostreptococci", .partial)
     ]),
-    "cefepime": anaerobeCov([
+    .cefepime: anaerobeCov([
         ("bFragilis", .none), ("fNecrophorum", .partial), ("prevotella", .partial),
         ("actinomyces", .partial), ("clostridium", .partial), ("cAcnes", .full), ("peptostreptococci", .partial)
     ]),
-    "cefotaxime": anaerobeCov([
+    .cefotaxime: anaerobeCov([
         ("bFragilis", .none), ("fNecrophorum", .partial), ("prevotella", .partial),
         ("actinomyces", .partial), ("clostridium", .partial), ("cAcnes", .full), ("peptostreptococci", .partial)
     ]),
-    "cefotetan": anaerobeCov([
+    .cefotetan: anaerobeCov([
         ("bFragilis", .partial), ("fNecrophorum", .full), ("prevotella", .full),
         ("actinomyces", .partial), ("clostridium", .partial), ("cAcnes", .partial), ("peptostreptococci", .partial)
     ]),
-    "cefoxitin": anaerobeCov([
+    .cefoxitin: anaerobeCov([
         ("bFragilis", .full), ("fNecrophorum", .full), ("prevotella", .full),
         ("actinomyces", .partial), ("clostridium", .full), ("cAcnes", .partial), ("peptostreptococci", .full)
     ]),
-    "ceftazidime": anaerobeCov([
+    .ceftazidime: anaerobeCov([
         ("bFragilis", .none), ("fNecrophorum", .partial), ("prevotella", .partial),
         ("actinomyces", .none), ("clostridium", .none), ("cAcnes", .partial), ("peptostreptococci", .partial)
     ]),
-    "ceftriaxone": anaerobeCov([
+    .ceftriaxone: anaerobeCov([
         ("bFragilis", .none), ("fNecrophorum", .partial), ("prevotella", .partial),
         ("actinomyces", .partial), ("clostridium", .partial), ("cAcnes", .full), ("peptostreptococci", .partial)
     ]),
-    "cefuroxime": anaerobeCov([
+    .cefuroxime: anaerobeCov([
         ("bFragilis", .none), ("fNecrophorum", .partial), ("prevotella", .partial),
         ("actinomyces", .partial), ("clostridium", .partial), ("cAcnes", .full), ("peptostreptococci", .partial)
     ]),
-    "ciprofloxacin": anaerobeCov([
+    .ciprofloxacin: anaerobeCov([
         ("bFragilis", .none), ("fNecrophorum", .none), ("prevotella", .none),
         ("actinomyces", .none), ("clostridium", .none), ("cAcnes", .partial), ("peptostreptococci", .none)
     ]),
-    "clindamycin": anaerobeCov([
+    .clindamycin: anaerobeCov([
         ("bFragilis", .partial), ("fNecrophorum", .full), ("prevotella", .full),
         ("actinomyces", .full), ("clostridium", .partial), ("cAcnes", .partial), ("peptostreptococci", .full)
     ]),
-    "daptomycin": anaerobeCov([
+    .daptomycin: anaerobeCov([
         ("bFragilis", .none), ("fNecrophorum", .none), ("prevotella", .none),
         ("actinomyces", .none), ("clostridium", .none), ("cAcnes", .none), ("peptostreptococci", .none)
     ]),
-    "dicloxacillin": anaerobeCov([
+    .dicloxacillin: anaerobeCov([
         ("bFragilis", .none), ("fNecrophorum", .none), ("prevotella", .none),
         ("actinomyces", .none), ("clostridium", .none), ("cAcnes", .partial), ("peptostreptococci", .none)
     ]),
-    "doxycycline": anaerobeCov([
+    .doxycycline: anaerobeCov([
         ("bFragilis", .none), ("fNecrophorum", .partial), ("prevotella", .partial),
         ("actinomyces", .partial), ("clostridium", .none), ("cAcnes", .full), ("peptostreptococci", .partial)
     ]),
-    "ertapenem": anaerobeCov([
+    .ertapenem: anaerobeCov([
         ("bFragilis", .full), ("fNecrophorum", .full), ("prevotella", .full),
         ("actinomyces", .full), ("clostridium", .full), ("cAcnes", .full), ("peptostreptococci", .full)
     ]),
-    "erythromycin": anaerobeCov([
+    .erythromycin: anaerobeCov([
         ("bFragilis", .none), ("fNecrophorum", .none), ("prevotella", .none),
         ("actinomyces", .partial), ("clostridium", .none), ("cAcnes", .partial), ("peptostreptococci", .none)
     ]),
-    "gentamicin": anaerobeCov([
+    .gentamicin: anaerobeCov([
         ("bFragilis", .none), ("fNecrophorum", .none), ("prevotella", .none),
         ("actinomyces", .none), ("clostridium", .none), ("cAcnes", .none), ("peptostreptococci", .none)
     ]),
-    "imipenem": anaerobeCov([
+    .imipenem: anaerobeCov([
         ("bFragilis", .full), ("fNecrophorum", .full), ("prevotella", .full),
         ("actinomyces", .full), ("clostridium", .full), ("cAcnes", .full), ("peptostreptococci", .full)
     ]),
-    "levofloxacin": anaerobeCov([
+    .levofloxacin: anaerobeCov([
         ("bFragilis", .none), ("fNecrophorum", .partial), ("prevotella", .partial),
         ("actinomyces", .none), ("clostridium", .none), ("cAcnes", .partial), ("peptostreptococci", .none)
     ]),
-    "linezolid": anaerobeCov([
+    .linezolid: anaerobeCov([
         ("bFragilis", .none), ("fNecrophorum", .none), ("prevotella", .none),
         ("actinomyces", .partial), ("clostridium", .partial), ("cAcnes", .full), ("peptostreptococci", .partial)
     ]),
-    "meropenem": anaerobeCov([
+    .meropenem: anaerobeCov([
         ("bFragilis", .full), ("fNecrophorum", .full), ("prevotella", .full),
         ("actinomyces", .full), ("clostridium", .full), ("cAcnes", .full), ("peptostreptococci", .full)
     ]),
-    "metronidazole": anaerobeCov([
+    .metronidazole: anaerobeCov([
         ("bFragilis", .full), ("fNecrophorum", .full), ("prevotella", .full),
         ("actinomyces", .none), ("clostridium", .full), ("cAcnes", .none), ("peptostreptococci", .full)
     ]),
-    "moxifloxacin": anaerobeCov([
+    .moxifloxacin: anaerobeCov([
         ("bFragilis", .partial), ("fNecrophorum", .full), ("prevotella", .full),
         ("actinomyces", .partial), ("clostridium", .partial), ("cAcnes", .full), ("peptostreptococci", .partial)
     ]),
-    "nafcillin": anaerobeCov([
+    .nafcillin: anaerobeCov([
         ("bFragilis", .none), ("fNecrophorum", .none), ("prevotella", .none),
         ("actinomyces", .none), ("clostridium", .none), ("cAcnes", .partial), ("peptostreptococci", .none)
     ]),
-    "nitrofurantoin": anaerobeCov([
+    .nitrofurantoin: anaerobeCov([
         ("bFragilis", .none), ("fNecrophorum", .none), ("prevotella", .none),
         ("actinomyces", .none), ("clostridium", .none), ("cAcnes", .none), ("peptostreptococci", .none)
     ]),
-    "penicillin": anaerobeCov([
+    .penicillin: anaerobeCov([
         ("bFragilis", .none), ("fNecrophorum", .full), ("prevotella", .partial),
         ("actinomyces", .full), ("clostridium", .full), ("cAcnes", .full), ("peptostreptococci", .full)
     ]),
-    "pipTazo": anaerobeCov([
+    .pipTazo: anaerobeCov([
         ("bFragilis", .full), ("fNecrophorum", .full), ("prevotella", .full),
         ("actinomyces", .full), ("clostridium", .full), ("cAcnes", .full), ("peptostreptococci", .full)
     ]),
-    "tigecycline": anaerobeCov([
+    .tigecycline: anaerobeCov([
         ("bFragilis", .full), ("fNecrophorum", .full), ("prevotella", .full),
         ("actinomyces", .full), ("clostridium", .full), ("cAcnes", .full), ("peptostreptococci", .full)
     ]),
-    "tmpSmx": anaerobeCov([
+    .tmpSmx: anaerobeCov([
         ("bFragilis", .none), ("fNecrophorum", .none), ("prevotella", .none),
         ("actinomyces", .none), ("clostridium", .none), ("cAcnes", .partial), ("peptostreptococci", .none)
     ]),
-    "tobramycin": anaerobeCov([
+    .tobramycin: anaerobeCov([
         ("bFragilis", .none), ("fNecrophorum", .none), ("prevotella", .none),
         ("actinomyces", .none), ("clostridium", .none), ("cAcnes", .none), ("peptostreptococci", .none)
     ]),
-    "vancomycin": anaerobeCov([
+    .vancomycin: anaerobeCov([
         ("bFragilis", .none), ("fNecrophorum", .none), ("prevotella", .none),
         ("actinomyces", .full), ("clostridium", .full), ("cAcnes", .full), ("peptostreptococci", .full)
     ]),
@@ -526,19 +583,19 @@ let detailedAnaerobeCoverage: [String: [String: CoverageLevel]] = [
 
 let allDiseases: [Disease] = [
     Disease(id: "animalBites", name: "Animal Bites",
-            associatedBacteria: ["communityGN", "anaerobesAbove", "strepNonPneumo"]),
+            associatedBacteria: [.communityGN, .anaerobesAbove, .strepNonPneumo]),
     Disease(id: "cellulitis", name: "Cellulitis",
-            associatedBacteria: ["mssa", "mrsa", "strepNonPneumo"]),
+            associatedBacteria: [.mssa, .mrsa, .strepNonPneumo]),
     Disease(id: "cap", name: "Community Acquired Pneumonia",
-            associatedBacteria: ["strepPneumo", "communityGN", "mycoplasma", "chlamydophila", "legionella"]),
+            associatedBacteria: [.strepPneumo, .communityGN, .mycoplasma, .chlamydophila, .legionella]),
     Disease(id: "meningitis", name: "Meningitis",
-            associatedBacteria: ["strepPneumo", "communityGN"]),
+            associatedBacteria: [.strepPneumo, .communityGN]),
     Disease(id: "nosocomialPneumonia", name: "Nosocomial Pneumonia",
-            associatedBacteria: ["nosocomialGN", "pseudomonas", "mrsa"]),
+            associatedBacteria: [.nosocomialGN, .pseudomonas, .mrsa]),
     Disease(id: "uti", name: "Urinary Tract Infection",
-            associatedBacteria: ["communityGN", "eFaecalis", "eFaecium"]),
+            associatedBacteria: [.communityGN, .eFaecalis, .eFaecium]),
     Disease(id: "vap", name: "Ventilator Acquired Pneumonia",
-            associatedBacteria: ["pseudomonas", "nosocomialGN", "mrsa"]),
+            associatedBacteria: [.pseudomonas, .nosocomialGN, .mrsa]),
     Disease(id: "sepsis", name: "Sepsis - The 5 Killers",
-            associatedBacteria: ["strepPneumo", "communityGN", "mssa", "mrsa", "pseudomonas"]),
+            associatedBacteria: [.strepPneumo, .communityGN, .mssa, .mrsa, .pseudomonas]),
 ]

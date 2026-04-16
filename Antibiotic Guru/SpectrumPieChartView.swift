@@ -2,8 +2,8 @@ import SwiftUI
 
 struct SpectrumPieChartView: View {
     let bacteria: [Bacterium]
-    let coverageMap: [String: CoverageLevel]
-    let highlightedBacteria: Set<String>
+    let coverageMap: [BacteriumID: CoverageLevel]
+    let highlightedBacteria: Set<BacteriumID>
     let categoryFilter: BacteriaCategory?
 
     private let uncoveredColor = Color(red: 0.75, green: 0.78, blue: 0.82)

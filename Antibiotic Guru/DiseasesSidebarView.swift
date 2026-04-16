@@ -3,8 +3,8 @@ import SwiftUI
 struct DiseasesSidebarView: View {
     let diseases: [Disease]
     let bacteria: [Bacterium]
-    let coverageMap: [String: CoverageLevel]
-    let highlightedBacteria: Set<String>
+    let coverageMap: [BacteriumID: CoverageLevel]
+    let highlightedBacteria: Set<BacteriumID>
     @Binding var selectedDisease: Disease?
     @Binding var searchText: String
     let onSelect: (Disease) -> Void
