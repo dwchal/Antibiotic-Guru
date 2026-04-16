@@ -9,6 +9,12 @@ import SwiftUI
 
 @main
 struct Antibiotic_GuruApp: App {
+    init() {
+        #if DEBUG
+        validateClinicalData()
+        #endif
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()

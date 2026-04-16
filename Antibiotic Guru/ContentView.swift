@@ -7,6 +7,8 @@ struct ContentView: View {
     @State private var showAnaerobeDetail = false
     @State private var antibioticSearchText = ""
     @State private var diseaseSearchText = ""
+    @SceneStorage("selectedAntibioticId") private var savedAntibioticId: String?
+    @SceneStorage("selectedDiseaseId") private var savedDiseaseId: String?
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     private var coverageMap: [String: CoverageLevel] {
@@ -20,12 +22,6 @@ struct ContentView: View {
         return []
     }
 
-    private var groupedBacteria: [(category: BacteriaCategory, bacteria: [Bacterium])] {
-        BacteriaCategory.allCases.map { category in
-            (category, allBacteria.filter { $0.category == category })
-        }
-    }
-
     private var filteredAntibiotics: [Antibiotic] {
         guard !antibioticSearchText.isEmpty else { return allAntibiotics }
         return allAntibiotics.filter { $0.name.localizedCaseInsensitiveContains(antibioticSearchText) }
@@ -37,10 +33,16 @@ struct ContentView: View {
     }
 
     var body: some View {
-        if horizontalSizeClass == .compact {
-            compactLayout
-        } else {
-            regularLayout
+        Group {
+            if horizontalSizeClass == .compact {
+                compactLayout
+            } else {
+                regularLayout
+            }
+        }
+        .onAppear(perform: restoreSelection)
+        .sheet(isPresented: $showAnaerobeDetail) {
+            AnaerobeDetailView(selectedAntibiotic: selectedAntibiotic)
         }
     }
 
@@ -50,16 +52,29 @@ struct ContentView: View {
         VStack(spacing: 0) {
             titleBar
             HStack(spacing: 0) {
-                antibioticsSidebar
-                    .frame(width: 220)
+                AntibioticsSidebarView(
+                    antibiotics: allAntibiotics,
+                    selectedAntibiotic: $selectedAntibiotic,
+                    searchText: $antibioticSearchText,
+                    onSelect: selectAntibiotic
+                )
+                .frame(width: 220)
                 Divider()
                 chartSection
                 Divider()
-                diseasesSidebar
-                    .frame(width: 240)
+                DiseasesSidebarView(
+                    diseases: allDiseases,
+                    bacteria: allBacteria,
+                    coverageMap: coverageMap,
+                    highlightedBacteria: highlightedBacteria,
+                    selectedDisease: $selectedDisease,
+                    searchText: $diseaseSearchText,
+                    onSelect: selectDisease
+                )
+                .frame(width: 240)
             }
             Divider()
-            filterBar
+            FilterBarView(categoryFilter: $categoryFilter, showAnaerobeDetail: $showAnaerobeDetail)
                 .padding(.vertical, 8)
                 .background(Color.gray.opacity(0.1))
             disclaimer
@@ -74,7 +89,7 @@ struct ContentView: View {
                 VStack(spacing: 4) {
                     selectionHeader
                     chartSection
-                    filterBar
+                    FilterBarView(categoryFilter: $categoryFilter, showAnaerobeDetail: $showAnaerobeDetail)
                         .padding(.vertical, 6)
                     disclaimer
                 }
@@ -164,27 +179,7 @@ struct ContentView: View {
         .padding(.bottom, 4)
     }
 
-    // MARK: - Antibiotics Sidebar (iPad/Mac)
-
-    private var antibioticsSidebar: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text("Antibiotics")
-                .font(.headline)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-
-            ScrollView {
-                LazyVStack(alignment: .leading, spacing: 0) {
-                    ForEach(filteredAntibiotics) { abx in
-                        antibioticRow(abx)
-                        Divider().padding(.leading, 12)
-                    }
-                }
-            }
-        }
-    }
-
-    // MARK: - Antibiotics List (iPhone)
+    // MARK: - Phone Lists
 
     private var antibioticsListPhone: some View {
         List(filteredAntibiotics) { abx in
@@ -204,32 +199,6 @@ struct ContentView: View {
         }
         .searchable(text: $antibioticSearchText, prompt: "Search antibiotics")
     }
-
-    // MARK: - Diseases Sidebar (iPad/Mac)
-
-    private var diseasesSidebar: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 12) {
-                VStack(alignment: .leading, spacing: 0) {
-                    Text("Diseases")
-                        .font(.headline)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
-
-                    ForEach(filteredDiseases) { disease in
-                        diseaseRow(disease)
-                    }
-                }
-
-                Divider()
-
-                bacteriaGroupsList
-            }
-            .padding(.vertical, 8)
-        }
-    }
-
-    // MARK: - Diseases List (iPhone)
 
     private var diseasesListPhone: some View {
         List {
@@ -268,63 +237,9 @@ struct ContentView: View {
         .searchable(text: $diseaseSearchText, prompt: "Search diseases")
     }
 
-    // MARK: - Shared Row Components
-
-    private func antibioticRow(_ abx: Antibiotic) -> some View {
-        Button {
-            selectAntibiotic(abx)
-        } label: {
-            Text(abx.name)
-                .font(.system(size: 14))
-                .foregroundColor(selectedAntibiotic?.id == abx.id ? .white : .primary)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
-                .background(
-                    selectedAntibiotic?.id == abx.id ? Color.blue : Color.clear
-                )
-        }
-        .buttonStyle(.plain)
-    }
-
-    private func diseaseRow(_ disease: Disease) -> some View {
-        Button {
-            selectDisease(disease)
-        } label: {
-            Text(disease.name)
-                .font(.system(size: 13))
-                .foregroundColor(selectedDisease?.id == disease.id ? .white : .primary)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 4)
-                .background(
-                    selectedDisease?.id == disease.id ? Color.orange : Color.clear
-                )
-        }
-        .buttonStyle(.plain)
-    }
-
-    private var bacteriaGroupsList: some View {
-        ForEach(groupedBacteria, id: \.category) { group in
-            VStack(alignment: .leading, spacing: 2) {
-                Text(group.category.rawValue)
-                    .font(.subheadline.bold())
-                    .padding(.horizontal, 12)
-
-                ForEach(group.bacteria) { bact in
-                    HStack(spacing: 6) {
-                        Circle()
-                            .fill(bacteriaIndicatorColor(for: bact))
-                            .frame(width: 10, height: 10)
-                        Text(bact.name)
-                            .font(.system(size: 12))
-                            .foregroundColor(.primary)
-                    }
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 1)
-                }
-            }
-            .padding(.bottom, 4)
+    private var groupedBacteria: [(category: BacteriaCategory, bacteria: [Bacterium])] {
+        BacteriaCategory.allCases.map { category in
+            (category, allBacteria.filter { $0.category == category })
         }
     }
 
@@ -335,76 +250,37 @@ struct ContentView: View {
         return coverageMap[bacterium.id]?.displayColor ?? Color.gray.opacity(0.4)
     }
 
-    // MARK: - Filter Bar
-
-    private var filterBar: some View {
-        VStack(spacing: 6) {
-            HStack(spacing: 8) {
-                filterButton("All", category: nil, color: .blue)
-                filterButton("Gram Positive", category: .gramPositive, color: .purple)
-                filterButton("Gram Negative", category: .gramNegative, color: .red)
-            }
-            HStack(spacing: 8) {
-                anaerobeDetailButton
-                filterButton("Atypicals", category: .atypicals, color: .green)
-            }
-        }
-        .padding(.horizontal)
-    }
-
-    private var anaerobeDetailButton: some View {
-        Button {
-            showAnaerobeDetail = true
-        } label: {
-            HStack(spacing: 4) {
-                Text("Anaerobes")
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 10, weight: .bold))
-            }
-            .font(.system(size: 13, weight: .semibold))
-            .foregroundColor(.orange)
-            .padding(.horizontal, 12)
-            .padding(.vertical, 6)
-            .background(Color.orange.opacity(0.15))
-            .cornerRadius(8)
-        }
-        .buttonStyle(.plain)
-        .sheet(isPresented: $showAnaerobeDetail) {
-            AnaerobeDetailView(selectedAntibiotic: selectedAntibiotic)
-        }
-    }
-
-    private func filterButton(_ title: String, category: BacteriaCategory?, color: Color) -> some View {
-        let isSelected = categoryFilter == category
-        return Button {
-            categoryFilter = isSelected ? nil : category
-        } label: {
-            Text(title)
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundColor(isSelected ? .white : color)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
-                .background(isSelected ? color : color.opacity(0.15))
-                .cornerRadius(8)
-        }
-        .buttonStyle(.plain)
-    }
+    // MARK: - Selection
 
     private func selectAntibiotic(_ antibiotic: Antibiotic) {
         selectedDisease = nil
+        savedDiseaseId = nil
         if selectedAntibiotic?.id == antibiotic.id {
             selectedAntibiotic = nil
+            savedAntibioticId = nil
         } else {
             selectedAntibiotic = antibiotic
+            savedAntibioticId = antibiotic.id
         }
     }
 
     private func selectDisease(_ disease: Disease) {
         selectedAntibiotic = nil
+        savedAntibioticId = nil
         if selectedDisease?.id == disease.id {
             selectedDisease = nil
+            savedDiseaseId = nil
         } else {
             selectedDisease = disease
+            savedDiseaseId = disease.id
+        }
+    }
+
+    private func restoreSelection() {
+        if let id = savedAntibioticId {
+            selectedAntibiotic = allAntibiotics.first { $0.id == id }
+        } else if let id = savedDiseaseId {
+            selectedDisease = allDiseases.first { $0.id == id }
         }
     }
 }
