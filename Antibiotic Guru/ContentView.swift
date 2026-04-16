@@ -12,11 +12,11 @@ struct ContentView: View {
     @SceneStorage("selectedDiseaseId") private var savedDiseaseId: String?
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
-    private var coverageMap: [String: CoverageLevel] {
+    private var coverageMap: [BacteriumID: CoverageLevel] {
         selectedAntibiotic?.coverage ?? [:]
     }
 
-    private var highlightedBacteria: Set<String> {
+    private var highlightedBacteria: Set<BacteriumID> {
         if let disease = selectedDisease {
             return Set(disease.associatedBacteria)
         }
@@ -262,7 +262,7 @@ struct ContentView: View {
             savedAntibioticId = nil
         } else {
             selectedAntibiotic = antibiotic
-            savedAntibioticId = antibiotic.id
+            savedAntibioticId = antibiotic.id.rawValue
         }
     }
 
@@ -280,7 +280,7 @@ struct ContentView: View {
 
     private func restoreSelection() {
         if let id = savedAntibioticId {
-            selectedAntibiotic = allAntibiotics.first { $0.id == id }
+            selectedAntibiotic = allAntibiotics.first { $0.id.rawValue == id }
         } else if let id = savedDiseaseId {
             selectedDisease = allDiseases.first { $0.id == id }
         }
