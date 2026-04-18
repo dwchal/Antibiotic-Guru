@@ -10,6 +10,16 @@
       ]
     },
     {
+      "id": "candidemia",
+      "name": "Candidemia",
+      "associatedFungi": [
+        "candidaAlbicans",
+        "candidaGlabrata",
+        "candidaParapsilosis",
+        "candidaAuris"
+      ]
+    },
+    {
       "id": "cellulitis",
       "name": "Cellulitis",
       "associatedBacteria": [
@@ -30,11 +40,39 @@
       ]
     },
     {
+      "id": "cryptococcalMeningitis",
+      "name": "Cryptococcal Meningitis",
+      "associatedFungi": [
+        "cryptococcus"
+      ]
+    },
+    {
+      "id": "invasiveAspergillosis",
+      "name": "Invasive Aspergillosis",
+      "associatedFungi": [
+        "aspergillus"
+      ]
+    },
+    {
+      "id": "invasiveCandidiasis",
+      "name": "Invasive Candidiasis (Deep-Seated)",
+      "associatedFungi": [
+        "candidaAlbicans",
+        "candidaGlabrata",
+        "candidaKrusei",
+        "candidaParapsilosis",
+        "candidaAuris"
+      ]
+    },
+    {
       "id": "meningitis",
       "name": "Meningitis",
       "associatedBacteria": [
         "strepPneumo",
         "communityGN"
+      ],
+      "associatedFungi": [
+        "cryptococcus"
       ]
     },
     {

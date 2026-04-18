@@ -1,0 +1,124 @@
+{
+  "antifungals": [
+    {
+      "id": "fluconazole",
+      "name": "Fluconazole",
+      "coverage": {
+        "candidaAlbicans": "full",
+        "candidaGlabrata": "partial",
+        "candidaKrusei": "none",
+        "candidaParapsilosis": "full",
+        "candidaAuris": "none",
+        "cryptococcus": "full",
+        "aspergillus": "none",
+        "mucorales": "none",
+        "pneumocystis": "none"
+      }
+    },
+    {
+      "id": "voriconazole",
+      "name": "Voriconazole",
+      "coverage": {
+        "candidaAlbicans": "full",
+        "candidaGlabrata": "partial",
+        "candidaKrusei": "full",
+        "candidaParapsilosis": "full",
+        "candidaAuris": "partial",
+        "cryptococcus": "full",
+        "aspergillus": "full",
+        "mucorales": "none",
+        "pneumocystis": "none"
+      }
+    },
+    {
+      "id": "posaconazole",
+      "name": "Posaconazole",
+      "coverage": {
+        "candidaAlbicans": "full",
+        "candidaGlabrata": "partial",
+        "candidaKrusei": "full",
+        "candidaParapsilosis": "full",
+        "candidaAuris": "partial",
+        "cryptococcus": "full",
+        "aspergillus": "full",
+        "mucorales": "partial",
+        "pneumocystis": "none"
+      }
+    },
+    {
+      "id": "isavuconazole",
+      "name": "Isavuconazole",
+      "coverage": {
+        "candidaAlbicans": "full",
+        "candidaGlabrata": "partial",
+        "candidaKrusei": "full",
+        "candidaParapsilosis": "full",
+        "candidaAuris": "partial",
+        "cryptococcus": "full",
+        "aspergillus": "full",
+        "mucorales": "partial",
+        "pneumocystis": "none"
+      }
+    },
+    {
+      "id": "caspofungin",
+      "name": "Caspofungin",
+      "coverage": {
+        "candidaAlbicans": "full",
+        "candidaGlabrata": "full",
+        "candidaKrusei": "full",
+        "candidaParapsilosis": "partial",
+        "candidaAuris": "partial",
+        "cryptococcus": "none",
+        "aspergillus": "partial",
+        "mucorales": "none",
+        "pneumocystis": "partial"
+      }
+    },
+    {
+      "id": "micafungin",
+      "name": "Micafungin",
+      "coverage": {
+        "candidaAlbicans": "full",
+        "candidaGlabrata": "full",
+        "candidaKrusei": "full",
+        "candidaParapsilosis": "partial",
+        "candidaAuris": "partial",
+        "cryptococcus": "none",
+        "aspergillus": "partial",
+        "mucorales": "none",
+        "pneumocystis": "partial"
+      }
+    },
+    {
+      "id": "anidulafungin",
+      "name": "Anidulafungin",
+      "coverage": {
+        "candidaAlbicans": "full",
+        "candidaGlabrata": "full",
+        "candidaKrusei": "full",
+        "candidaParapsilosis": "partial",
+        "candidaAuris": "partial",
+        "cryptococcus": "none",
+        "aspergillus": "partial",
+        "mucorales": "none",
+        "pneumocystis": "partial"
+      }
+    },
+    {
+      "id": "amphotericinB",
+      "name": "Amphotericin B",
+      "coverage": {
+        "candidaAlbicans": "full",
+        "candidaGlabrata": "partial",
+        "candidaKrusei": "full",
+        "candidaParapsilosis": "full",
+        "candidaAuris": "partial",
+        "cryptococcus": "full",
+        "aspergillus": "full",
+        "mucorales": "full",
+        "pneumocystis": "none"
+      }
+    }
+  ]
+}

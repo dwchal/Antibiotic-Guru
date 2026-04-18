@@ -1,24 +1,52 @@
 import SwiftUI
 
+// MARK: - Unified organism for pie chart display
+
+enum OrganismCategory: Hashable {
+    case bacteria(BacteriaCategory)
+    case fungus(FungusCategory)
+
+    var displayName: String {
+        switch self {
+        case .bacteria(let cat): cat.displayName
+        case .fungus(let cat): cat.displayName
+        }
+    }
+
+    var rawValue: String {
+        switch self {
+        case .bacteria(let cat): "bacteria_\(cat.rawValue)"
+        case .fungus(let cat): "fungus_\(cat.rawValue)"
+        }
+    }
+}
+
+struct ChartOrganism: Identifiable {
+    let id: String
+    let name: String
+    let shortName: String
+    let category: OrganismCategory
+}
+
 struct SpectrumPieChartView: View {
-    let bacteria: [Bacterium]
-    let coverageMap: [BacteriumID: CoverageLevel]
-    let highlightedBacteria: Set<BacteriumID>
-    let categoryFilter: BacteriaCategory?
+    let organisms: [ChartOrganism]
+    let coverageLevels: [String: CoverageLevel]
+    let highlightedIDs: Set<String>
+    let categoryFilter: OrganismCategory?
 
     private let uncoveredColor = Color(red: 0.75, green: 0.78, blue: 0.82)
     private let highlightColor = Color.orange
 
-    private var filteredBacteria: [Bacterium] {
+    private var filteredOrganisms: [ChartOrganism] {
         if let filter = categoryFilter {
-            return bacteria.filter { $0.category == filter }
+            return organisms.filter { $0.category == filter }
         }
-        return bacteria
+        return organisms
     }
 
     private var sliceAngle: Double {
-        guard !filteredBacteria.isEmpty else { return 0 }
-        return 360.0 / Double(filteredBacteria.count)
+        guard !filteredOrganisms.isEmpty else { return 0 }
+        return 360.0 / Double(filteredOrganisms.count)
     }
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -26,19 +54,18 @@ struct SpectrumPieChartView: View {
     var body: some View {
         GeometryReader { geo in
             let isCompact = horizontalSizeClass == .compact
-            // On compact, use width as the reference since it's the constraining dimension
             let size = isCompact ? geo.size.width : min(geo.size.width, geo.size.height)
             let pieRadius = size * (isCompact ? 0.24 : 0.32)
             let center = CGPoint(x: geo.size.width / 2, y: geo.size.height / 2)
 
             ZStack {
                 // Draw pie slices
-                ForEach(Array(filteredBacteria.enumerated()), id: \.element.id) { index, bacterium in
+                ForEach(Array(filteredOrganisms.enumerated()), id: \.element.id) { index, organism in
                     let startAngle = Double(index) * sliceAngle - 90
                     let endAngle = startAngle + sliceAngle
 
                     PieSlice(startAngle: .degrees(startAngle), endAngle: .degrees(endAngle))
-                        .fill(sliceColor(for: bacterium))
+                        .fill(sliceColor(for: organism))
                         .overlay(
                             PieSlice(startAngle: .degrees(startAngle), endAngle: .degrees(endAngle))
                                 .stroke(Color.white, lineWidth: 1.5)
@@ -49,7 +76,7 @@ struct SpectrumPieChartView: View {
                 }
 
                 // Draw labels outside the pie with lines
-                ForEach(Array(filteredBacteria.enumerated()), id: \.element.id) { index, bacterium in
+                ForEach(Array(filteredOrganisms.enumerated()), id: \.element.id) { index, organism in
                     let startAngle = Double(index) * sliceAngle - 90
                     let midAngleDeg = startAngle + sliceAngle / 2.0
                     let midAngleRad = midAngleDeg * .pi / 180
@@ -72,7 +99,6 @@ struct SpectrumPieChartView: View {
                         if isLeftSide { return max(naturalLabelX, labelWidth) }
                         return naturalLabelX
                     }()
-                    // Shift the frame so the anchored edge aligns with the label point
                     let adjustedX = isRightSide ? labelX + labelWidth / 2 : (isLeftSide ? labelX - labelWidth / 2 : labelX)
 
                     // Line from pie edge to the inner edge of the label
@@ -95,25 +121,25 @@ struct SpectrumPieChartView: View {
                     }
                     .stroke(Color.secondary.opacity(0.5), lineWidth: 1)
 
-                    Text(bacterium.shortName)
+                    Text(organism.shortName)
                         .font(.system(size: fontSize, weight: .medium))
                         .foregroundColor(.primary)
                         .multilineTextAlignment(textAlignment)
                         .lineLimit(3)
                         .frame(width: labelWidth, alignment: alignment)
                         .position(x: adjustedX, y: labelY)
-                        .accessibilityLabel("\(bacterium.name): \(sliceAccessibilityLabel(for: bacterium))")
+                        .accessibilityLabel("\(organism.name): \(sliceAccessibilityLabel(for: organism))")
                 }
 
                 // Category labels (outermost ring) - only on regular size
                 if !isCompact {
-                    ForEach(categoryLabelPositions(filteredBacteria), id: \.category.rawValue) { info in
+                    ForEach(categoryLabelPositions(filteredOrganisms), id: \.category.rawValue) { info in
                         let angleRad = info.angle * .pi / 180
                         let catRadius = pieRadius + size * 0.30
                         let x = center.x + catRadius * cos(angleRad)
                         let y = center.y + catRadius * sin(angleRad)
 
-                        Text(info.category.rawValue)
+                        Text(info.category.displayName)
                             .font(.system(size: 14, weight: .bold))
                             .foregroundColor(.primary)
                             .position(x: x, y: y)
@@ -123,40 +149,40 @@ struct SpectrumPieChartView: View {
         }
     }
 
-    private func sliceColor(for bacterium: Bacterium) -> Color {
-        if !highlightedBacteria.isEmpty {
-            return highlightedBacteria.contains(bacterium.id) ? highlightColor : uncoveredColor
+    private func sliceColor(for organism: ChartOrganism) -> Color {
+        if !highlightedIDs.isEmpty {
+            return highlightedIDs.contains(organism.id) ? highlightColor : uncoveredColor
         }
-        guard let level = coverageMap[bacterium.id] else { return uncoveredColor }
+        guard let level = coverageLevels[organism.id] else { return uncoveredColor }
         return level.displayColor
     }
 
-    private func sliceAccessibilityLabel(for bacterium: Bacterium) -> String {
-        if !highlightedBacteria.isEmpty {
-            return highlightedBacteria.contains(bacterium.id) ? "Highlighted for selected disease" : "Not highlighted"
+    private func sliceAccessibilityLabel(for organism: ChartOrganism) -> String {
+        if !highlightedIDs.isEmpty {
+            return highlightedIDs.contains(organism.id) ? "Highlighted for selected disease" : "Not highlighted"
         }
-        return coverageMap[bacterium.id]?.accessibilityLabel ?? "No coverage data"
+        return coverageLevels[organism.id]?.accessibilityLabel ?? "No coverage data"
     }
 
     private struct CategoryLabelInfo {
-        let category: BacteriaCategory
+        let category: OrganismCategory
         let angle: Double
     }
 
-    private func categoryLabelPositions(_ bacteria: [Bacterium]) -> [CategoryLabelInfo] {
+    private func categoryLabelPositions(_ organisms: [ChartOrganism]) -> [CategoryLabelInfo] {
         var result: [CategoryLabelInfo] = []
-        var currentCategory: BacteriaCategory?
+        var currentCategory: OrganismCategory?
         var categoryStart = 0
         var categoryCount = 0
 
-        for (index, bact) in bacteria.enumerated() {
-            if bact.category != currentCategory {
+        for (index, org) in organisms.enumerated() {
+            if org.category != currentCategory {
                 if let cat = currentCategory {
                     let midIndex = Double(categoryStart) + Double(categoryCount) / 2.0
                     let angle = midIndex * sliceAngle - 90
                     result.append(CategoryLabelInfo(category: cat, angle: angle))
                 }
-                currentCategory = bact.category
+                currentCategory = org.category
                 categoryStart = index
                 categoryCount = 1
             } else {
@@ -170,6 +196,28 @@ struct SpectrumPieChartView: View {
         }
 
         return result
+    }
+}
+
+// MARK: - Convenience initializers for backward compatibility
+
+extension SpectrumPieChartView {
+    init(bacteria: [Bacterium], coverageMap: [BacteriumID: CoverageLevel], highlightedBacteria: Set<BacteriumID>, categoryFilter: BacteriaCategory?) {
+        self.organisms = bacteria.map { bact in
+            ChartOrganism(id: bact.id.rawValue, name: bact.name, shortName: bact.shortName, category: .bacteria(bact.category))
+        }
+        self.coverageLevels = Dictionary(uniqueKeysWithValues: coverageMap.map { ($0.key.rawValue, $0.value) })
+        self.highlightedIDs = Set(highlightedBacteria.map(\.rawValue))
+        self.categoryFilter = categoryFilter.map { .bacteria($0) }
+    }
+
+    init(fungi: [Fungus], coverageMap: [FungusID: CoverageLevel], highlightedFungi: Set<FungusID>, categoryFilter: FungusCategory?) {
+        self.organisms = fungi.map { fungus in
+            ChartOrganism(id: fungus.id.rawValue, name: fungus.name, shortName: fungus.shortName, category: .fungus(fungus.category))
+        }
+        self.coverageLevels = Dictionary(uniqueKeysWithValues: coverageMap.map { ($0.key.rawValue, $0.value) })
+        self.highlightedIDs = Set(highlightedFungi.map(\.rawValue))
+        self.categoryFilter = categoryFilter.map { .fungus($0) }
     }
 }
 

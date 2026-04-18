@@ -2,19 +2,28 @@ import Foundation
 
 // MARK: - Models
 
-enum CoverageLevel: Int, Codable {
-    case none = 0
-    case partial = 1
-    case full = 2
+enum CoverageLevel: String, Codable {
+    case none
+    case partial
+    case full
 }
 
 enum BacteriaCategory: String, CaseIterable, Identifiable, Codable {
-    case gramPositive = "Gram Positives"
-    case gramNegative = "Gram Negatives"
-    case anaerobes = "Anaerobes"
-    case atypicals = "Atypicals"
+    case gramPositive
+    case gramNegative
+    case anaerobes
+    case atypicals
 
     var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .gramPositive: "Gram Positives"
+        case .gramNegative: "Gram Negatives"
+        case .anaerobes: "Anaerobes"
+        case .atypicals: "Atypicals"
+        }
+    }
 }
 
 enum BacteriumID: String, CaseIterable, Hashable, Codable {
@@ -85,12 +94,111 @@ struct Antibiotic: Identifiable, Codable {
     let id: AntibioticID
     let name: String
     let coverage: [BacteriumID: CoverageLevel]
+
+    private enum CodingKeys: String, CodingKey {
+        case id, name, coverage
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(AntibioticID.self, forKey: .id)
+        name = try container.decode(String.self, forKey: .name)
+        let raw = try container.decode([String: CoverageLevel].self, forKey: .coverage)
+        coverage = try raw.reduce(into: [:]) { result, pair in
+            guard let key = BacteriumID(rawValue: pair.key) else {
+                throw DecodingError.dataCorruptedError(forKey: .coverage, in: container, debugDescription: "Unknown bacterium ID: \(pair.key)")
+            }
+            result[key] = pair.value
+        }
+    }
 }
 
 struct Disease: Identifiable, Codable {
     let id: String
     let name: String
     let associatedBacteria: [BacteriumID]
+    let associatedFungi: [FungusID]
+
+    private enum CodingKeys: String, CodingKey {
+        case id, name, associatedBacteria, associatedFungi
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        name = try container.decode(String.self, forKey: .name)
+        associatedBacteria = try container.decodeIfPresent([BacteriumID].self, forKey: .associatedBacteria) ?? []
+        associatedFungi = try container.decodeIfPresent([FungusID].self, forKey: .associatedFungi) ?? []
+    }
+}
+
+// MARK: - Fungal Models
+
+enum FungusCategory: String, CaseIterable, Identifiable, Codable {
+    case yeasts
+    case molds
+
+    var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .yeasts: "Yeasts"
+        case .molds: "Molds"
+        }
+    }
+}
+
+enum FungusID: String, CaseIterable, Hashable, Codable {
+    case candidaAlbicans
+    case candidaGlabrata
+    case candidaKrusei
+    case candidaParapsilosis
+    case candidaAuris
+    case aspergillus
+    case cryptococcus
+    case mucorales
+    case pneumocystis
+}
+
+struct Fungus: Identifiable, Codable {
+    let id: FungusID
+    let name: String
+    let shortName: String
+    let category: FungusCategory
+}
+
+enum AntifungalID: String, CaseIterable, Hashable, Codable {
+    case fluconazole
+    case voriconazole
+    case posaconazole
+    case isavuconazole
+    case caspofungin
+    case micafungin
+    case anidulafungin
+    case amphotericinB
+}
+
+struct Antifungal: Identifiable, Codable {
+    let id: AntifungalID
+    let name: String
+    let coverage: [FungusID: CoverageLevel]
+
+    private enum CodingKeys: String, CodingKey {
+        case id, name, coverage
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(AntifungalID.self, forKey: .id)
+        name = try container.decode(String.self, forKey: .name)
+        let raw = try container.decode([String: CoverageLevel].self, forKey: .coverage)
+        coverage = try raw.reduce(into: [:]) { result, pair in
+            guard let key = FungusID(rawValue: pair.key) else {
+                throw DecodingError.dataCorruptedError(forKey: .coverage, in: container, debugDescription: "Unknown fungus ID: \(pair.key)")
+            }
+            result[key] = pair.value
+        }
+    }
 }
 
 struct ClinicalDataMetadata: Codable {
@@ -101,10 +209,17 @@ struct ClinicalDataMetadata: Codable {
 }
 
 enum AnaerobeSubcategory: String, CaseIterable, Identifiable, Codable {
-    case gramNegative = "Anaerobic Gram Negatives"
-    case gramPositive = "Anaerobic Gram Positives"
+    case gramNegative
+    case gramPositive
 
     var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .gramNegative: "Anaerobic Gram Negatives"
+        case .gramPositive: "Anaerobic Gram Positives"
+        }
+    }
 }
 
 struct DetailedAnaerobe: Identifiable, Codable {
@@ -128,6 +243,8 @@ struct ClinicalDataSnapshot {
     let diseases: [Disease]
     let detailedAnaerobes: [DetailedAnaerobe]
     let detailedAnaerobeCoverage: [AntibioticID: [String: CoverageLevel]]
+    let fungi: [Fungus]
+    let antifungals: [Antifungal]
     let loadStatus: ClinicalDataLoadStatus
 }
 
@@ -140,4 +257,6 @@ let allAntibiotics = clinicalDataSnapshot.antibiotics
 let allDiseases = clinicalDataSnapshot.diseases
 let allDetailedAnaerobes = clinicalDataSnapshot.detailedAnaerobes
 let detailedAnaerobeCoverage = clinicalDataSnapshot.detailedAnaerobeCoverage
+let allFungi = clinicalDataSnapshot.fungi
+let allAntifungals = clinicalDataSnapshot.antifungals
 let clinicalDataLoadStatus = clinicalDataSnapshot.loadStatus

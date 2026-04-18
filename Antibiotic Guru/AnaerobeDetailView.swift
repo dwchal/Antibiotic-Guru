@@ -27,7 +27,7 @@ struct AnaerobeDetailView: View {
                 }
 
                 ForEach(AnaerobeSubcategory.allCases) { subcategory in
-                    Section(subcategory.rawValue) {
+                    Section(subcategory.displayName) {
                         ForEach(allDetailedAnaerobes.filter { $0.subcategory == subcategory }) { anaerobe in
                             anaerobeRow(anaerobe)
                         }
