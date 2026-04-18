@@ -1,0 +1,100 @@
+{
+  "metadata": {
+    "version": "2026.04",
+    "lastReviewedDate": "April 15, 2026",
+    "reviewer": "Local Editorial Review",
+    "sourceSummary": "Educational synthesis from common antibiogram and infectious disease teaching references."
+  },
+  "bacteria": [
+    {
+      "id": "eFaecalis",
+      "name": "Enterococcus faecalis",
+      "shortName": "E. faecalis",
+      "category": "gramPositive"
+    },
+    {
+      "id": "eFaecium",
+      "name": "Enterococcus faecium",
+      "shortName": "E. faecium",
+      "category": "gramPositive"
+    },
+    {
+      "id": "strepPneumo",
+      "name": "Streptococcus pneumoniae",
+      "shortName": "S. pneumoniae",
+      "category": "gramPositive"
+    },
+    {
+      "id": "strepNonPneumo",
+      "name": "Streptococcus (non-pneumoniae)",
+      "shortName": "Strep (non-pneumo)",
+      "category": "gramPositive"
+    },
+    {
+      "id": "staphNonAureus",
+      "name": "Coagulase negative Staphylococci",
+      "shortName": "CoNS",
+      "category": "gramPositive"
+    },
+    {
+      "id": "mssa",
+      "name": "Staphylococcus aureus (MSSA)",
+      "shortName": "S. aureus (MSSA)",
+      "category": "gramPositive"
+    },
+    {
+      "id": "mrsa",
+      "name": "Staphylococcus aureus (MRSA)",
+      "shortName": "S. aureus (MRSA)",
+      "category": "gramPositive"
+    },
+    {
+      "id": "mycoplasma",
+      "name": "Mycoplasma pneumoniae",
+      "shortName": "M. pneumoniae",
+      "category": "atypicals"
+    },
+    {
+      "id": "chlamydophila",
+      "name": "Chlamydia pneumoniae",
+      "shortName": "C. pneumoniae",
+      "category": "atypicals"
+    },
+    {
+      "id": "legionella",
+      "name": "Legionella",
+      "shortName": "Legionella",
+      "category": "atypicals"
+    },
+    {
+      "id": "anaerobesBelow",
+      "name": "Anaerobes Below the Diaphragm",
+      "shortName": "Anaerobes\\nBelow Diaphragm",
+      "category": "anaerobes"
+    },
+    {
+      "id": "anaerobesAbove",
+      "name": "Anaerobes Above the Diaphragm",
+      "shortName": "Anaerobes\\nAbove Diaphragm",
+      "category": "anaerobes"
+    },
+    {
+      "id": "pseudomonas",
+      "name": "Pseudomonas aeruginosa",
+      "shortName": "P. aeruginosa",
+      "category": "gramNegative"
+    },
+    {
+      "id": "nosocomialGN",
+      "name": "Nosocomial Gram Neg. (non-Pseudomonal)",
+      "shortName": "Nosocomial GN\\n(non-Pseudomonal)",
+      "category": "gramNegative"
+    },
+    {
+      "id": "communityGN",
+      "name": "Community Gram Neg. (Enterobacteriaceae)",
+      "shortName": "Community GN\\n(Enterobact.)",
+      "category": "gramNegative"
+    }
+  ]
+}

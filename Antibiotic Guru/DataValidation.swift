@@ -1,40 +1,70 @@
 import Foundation
 
 #if DEBUG
-/// Validates that all antibiotic and disease data references are consistent.
-/// Call once at app launch in debug builds to catch typos and missing entries.
+/// Validates decoded clinical data schema and cross-reference completeness.
+/// Called once at app launch to fail fast on bad bundled data.
 func validateClinicalData() {
+    func fail(_ message: String) -> Never {
+        preconditionFailure("Clinical data validation failed: \(message)")
+    }
+
+    if allBacteria.isEmpty { fail("Bacteria dataset is empty") }
+    if allAntibiotics.isEmpty { fail("Antibiotics dataset is empty") }
+    if allDiseases.isEmpty { fail("Diseases dataset is empty") }
+    if allDetailedAnaerobes.isEmpty { fail("Detailed anaerobes dataset is empty") }
+
     let bacteriaIds = Set(allBacteria.map(\.id))
+    let expectedBacteriaIds = Set(BacteriumID.allCases)
+    if bacteriaIds != expectedBacteriaIds {
+        fail("Bacteria IDs mismatch. Missing: \(expectedBacteriaIds.subtracting(bacteriaIds).map(\.rawValue).sorted()) extra: \(bacteriaIds.subtracting(expectedBacteriaIds).map(\.rawValue).sorted())")
+    }
+
+    let antibioticIds = Set(allAntibiotics.map(\.id))
+    let expectedAntibioticIds = Set(AntibioticID.allCases)
+    if antibioticIds != expectedAntibioticIds {
+        fail("Antibiotic IDs mismatch. Missing: \(expectedAntibioticIds.subtracting(antibioticIds).map(\.rawValue).sorted()) extra: \(antibioticIds.subtracting(expectedAntibioticIds).map(\.rawValue).sorted())")
+    }
+
     let detailedAnaerobeIds = Set(allDetailedAnaerobes.map(\.id))
 
-    // Every antibiotic must reference every bacterium ID
     for abx in allAntibiotics {
         let coveredIds = Set(abx.coverage.keys)
         let missing = bacteriaIds.subtracting(coveredIds)
         let extra = coveredIds.subtracting(bacteriaIds)
-        assert(missing.isEmpty, "Antibiotic '\(abx.name)' missing coverage for: \(missing.map(\.rawValue).sorted())")
-        assert(extra.isEmpty, "Antibiotic '\(abx.name)' has unknown bacterium IDs: \(extra.map(\.rawValue).sorted())")
+        if !missing.isEmpty {
+            fail("Antibiotic '\(abx.name)' missing coverage for: \(missing.map(\.rawValue).sorted())")
+        }
+        if !extra.isEmpty {
+            fail("Antibiotic '\(abx.name)' has unknown bacterium IDs: \(extra.map(\.rawValue).sorted())")
+        }
     }
 
-    // Every antibiotic with detailed anaerobe data must reference every detailed anaerobe ID
+    let anaerobeCoverageIds = Set(detailedAnaerobeCoverage.keys)
+    let missingAnaerobeCoverage = antibioticIds.subtracting(anaerobeCoverageIds)
+    if !missingAnaerobeCoverage.isEmpty {
+        fail("Antibiotics missing detailed anaerobe data: \(missingAnaerobeCoverage.map(\.rawValue).sorted())")
+    }
+
     for (abxId, coverage) in detailedAnaerobeCoverage {
         let coveredIds = Set(coverage.keys)
         let missing = detailedAnaerobeIds.subtracting(coveredIds)
         let extra = coveredIds.subtracting(detailedAnaerobeIds)
-        assert(missing.isEmpty, "Anaerobe coverage for '\(abxId)' missing: \(missing.sorted())")
-        assert(extra.isEmpty, "Anaerobe coverage for '\(abxId)' has unknown IDs: \(extra.sorted())")
+        if !missing.isEmpty {
+            fail("Anaerobe coverage for '\(abxId.rawValue)' missing: \(missing.sorted())")
+        }
+        if !extra.isEmpty {
+            fail("Anaerobe coverage for '\(abxId.rawValue)' has unknown IDs: \(extra.sorted())")
+        }
     }
 
-    // Every antibiotic should have a detailed anaerobe entry
-    let abxIds = Set(allAntibiotics.map(\.id))
-    let anaerobeAbxIds = Set(detailedAnaerobeCoverage.keys)
-    let missingAnaerobe = abxIds.subtracting(anaerobeAbxIds)
-    assert(missingAnaerobe.isEmpty, "Antibiotics missing detailed anaerobe data: \(missingAnaerobe.map(\.rawValue).sorted())")
-
-    // Every disease must reference valid bacterium IDs
     for disease in allDiseases {
+        if disease.associatedBacteria.isEmpty {
+            fail("Disease '\(disease.name)' has no associated bacteria")
+        }
         let invalid = Set(disease.associatedBacteria).subtracting(bacteriaIds)
-        assert(invalid.isEmpty, "Disease '\(disease.name)' references unknown bacteria: \(invalid.map(\.rawValue).sorted())")
+        if !invalid.isEmpty {
+            fail("Disease '\(disease.name)' references unknown bacteria: \(invalid.map(\.rawValue).sorted())")
+        }
     }
 }
 #endif

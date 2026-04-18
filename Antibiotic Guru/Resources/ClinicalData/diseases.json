@@ -1,0 +1,79 @@
+{
+  "diseases": [
+    {
+      "id": "animalBites",
+      "name": "Animal Bites",
+      "associatedBacteria": [
+        "communityGN",
+        "anaerobesAbove",
+        "strepNonPneumo"
+      ]
+    },
+    {
+      "id": "cellulitis",
+      "name": "Cellulitis",
+      "associatedBacteria": [
+        "mssa",
+        "mrsa",
+        "strepNonPneumo"
+      ]
+    },
+    {
+      "id": "cap",
+      "name": "Community Acquired Pneumonia",
+      "associatedBacteria": [
+        "strepPneumo",
+        "communityGN",
+        "mycoplasma",
+        "chlamydophila",
+        "legionella"
+      ]
+    },
+    {
+      "id": "meningitis",
+      "name": "Meningitis",
+      "associatedBacteria": [
+        "strepPneumo",
+        "communityGN"
+      ]
+    },
+    {
+      "id": "nosocomialPneumonia",
+      "name": "Nosocomial Pneumonia",
+      "associatedBacteria": [
+        "nosocomialGN",
+        "pseudomonas",
+        "mrsa"
+      ]
+    },
+    {
+      "id": "uti",
+      "name": "Urinary Tract Infection",
+      "associatedBacteria": [
+        "communityGN",
+        "eFaecalis",
+        "eFaecium"
+      ]
+    },
+    {
+      "id": "vap",
+      "name": "Ventilator Acquired Pneumonia",
+      "associatedBacteria": [
+        "pseudomonas",
+        "nosocomialGN",
+        "mrsa"
+      ]
+    },
+    {
+      "id": "sepsis",
+      "name": "Sepsis - The 5 Killers",
+      "associatedBacteria": [
+        "strepPneumo",
+        "communityGN",
+        "mssa",
+        "mrsa",
+        "pseudomonas"
+      ]
+    }
+  ]
+}

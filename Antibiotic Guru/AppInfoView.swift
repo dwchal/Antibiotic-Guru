@@ -20,6 +20,10 @@ struct AppInfoView: View {
 
                     Text("Version \(clinicalDataMetadata.version)")
                     Text("Reviewed \(clinicalDataMetadata.lastReviewedDate)")
+                    Text("Loaded: \(clinicalDataLoadStatus.isLoaded ? "Yes" : "No")")
+                    Text("Source: \(clinicalDataLoadStatus.source)")
+                    Text("Status: \(clinicalDataLoadStatus.message)")
+                        .foregroundColor(.secondary)
                     Text(clinicalDataMetadata.sourceSummary)
                         .foregroundColor(.secondary)
 
