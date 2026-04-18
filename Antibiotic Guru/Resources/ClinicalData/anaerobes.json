@@ -1,0 +1,372 @@
+{
+  "anaerobes": [
+    {
+      "id": "bFragilis",
+      "name": "Bacteroides fragilis",
+      "shortName": "B. fragilis",
+      "subcategory": "gramNegative"
+    },
+    {
+      "id": "fNecrophorum",
+      "name": "Fusobacterium necrophorum",
+      "shortName": "F. necrophorum",
+      "subcategory": "gramNegative"
+    },
+    {
+      "id": "prevotella",
+      "name": "Prevotella sp.",
+      "shortName": "Prevotella",
+      "subcategory": "gramNegative"
+    },
+    {
+      "id": "actinomyces",
+      "name": "Actinomyces sp.",
+      "shortName": "Actinomyces",
+      "subcategory": "gramPositive"
+    },
+    {
+      "id": "clostridium",
+      "name": "Clostridium sp.",
+      "shortName": "Clostridium",
+      "subcategory": "gramPositive"
+    },
+    {
+      "id": "cAcnes",
+      "name": "Cutibacterium acnes",
+      "shortName": "C. acnes",
+      "subcategory": "gramPositive"
+    },
+    {
+      "id": "peptostreptococci",
+      "name": "Peptostreptococci",
+      "shortName": "Peptostrep",
+      "subcategory": "gramPositive"
+    }
+  ],
+  "detailedCoverage": {
+    "amikacin": {
+      "bFragilis": "none",
+      "fNecrophorum": "none",
+      "prevotella": "none",
+      "actinomyces": "none",
+      "clostridium": "none",
+      "cAcnes": "none",
+      "peptostreptococci": "none"
+    },
+    "amoxicillin": {
+      "bFragilis": "none",
+      "fNecrophorum": "full",
+      "prevotella": "partial",
+      "actinomyces": "full",
+      "clostridium": "full",
+      "cAcnes": "full",
+      "peptostreptococci": "full"
+    },
+    "amoxicillinClav": {
+      "bFragilis": "full",
+      "fNecrophorum": "full",
+      "prevotella": "full",
+      "actinomyces": "full",
+      "clostridium": "full",
+      "cAcnes": "full",
+      "peptostreptococci": "full"
+    },
+    "ampicillinSulb": {
+      "bFragilis": "full",
+      "fNecrophorum": "full",
+      "prevotella": "full",
+      "actinomyces": "full",
+      "clostridium": "full",
+      "cAcnes": "full",
+      "peptostreptococci": "full"
+    },
+    "azithromycin": {
+      "bFragilis": "none",
+      "fNecrophorum": "none",
+      "prevotella": "none",
+      "actinomyces": "none",
+      "clostridium": "none",
+      "cAcnes": "partial",
+      "peptostreptococci": "none"
+    },
+    "aztreonam": {
+      "bFragilis": "none",
+      "fNecrophorum": "none",
+      "prevotella": "none",
+      "actinomyces": "none",
+      "clostridium": "none",
+      "cAcnes": "none",
+      "peptostreptococci": "none"
+    },
+    "cefazolin": {
+      "bFragilis": "none",
+      "fNecrophorum": "none",
+      "prevotella": "none",
+      "actinomyces": "partial",
+      "clostridium": "none",
+      "cAcnes": "full",
+      "peptostreptococci": "partial"
+    },
+    "cefepime": {
+      "bFragilis": "none",
+      "fNecrophorum": "partial",
+      "prevotella": "partial",
+      "actinomyces": "partial",
+      "clostridium": "partial",
+      "cAcnes": "full",
+      "peptostreptococci": "partial"
+    },
+    "cefotaxime": {
+      "bFragilis": "none",
+      "fNecrophorum": "partial",
+      "prevotella": "partial",
+      "actinomyces": "partial",
+      "clostridium": "partial",
+      "cAcnes": "full",
+      "peptostreptococci": "partial"
+    },
+    "cefotetan": {
+      "bFragilis": "partial",
+      "fNecrophorum": "full",
+      "prevotella": "full",
+      "actinomyces": "partial",
+      "clostridium": "partial",
+      "cAcnes": "partial",
+      "peptostreptococci": "partial"
+    },
+    "cefoxitin": {
+      "bFragilis": "full",
+      "fNecrophorum": "full",
+      "prevotella": "full",
+      "actinomyces": "partial",
+      "clostridium": "full",
+      "cAcnes": "partial",
+      "peptostreptococci": "full"
+    },
+    "ceftazidime": {
+      "bFragilis": "none",
+      "fNecrophorum": "partial",
+      "prevotella": "partial",
+      "actinomyces": "none",
+      "clostridium": "none",
+      "cAcnes": "partial",
+      "peptostreptococci": "partial"
+    },
+    "ceftriaxone": {
+      "bFragilis": "none",
+      "fNecrophorum": "partial",
+      "prevotella": "partial",
+      "actinomyces": "partial",
+      "clostridium": "partial",
+      "cAcnes": "full",
+      "peptostreptococci": "partial"
+    },
+    "cefuroxime": {
+      "bFragilis": "none",
+      "fNecrophorum": "partial",
+      "prevotella": "partial",
+      "actinomyces": "partial",
+      "clostridium": "partial",
+      "cAcnes": "full",
+      "peptostreptococci": "partial"
+    },
+    "ciprofloxacin": {
+      "bFragilis": "none",
+      "fNecrophorum": "none",
+      "prevotella": "none",
+      "actinomyces": "none",
+      "clostridium": "none",
+      "cAcnes": "partial",
+      "peptostreptococci": "none"
+    },
+    "clindamycin": {
+      "bFragilis": "partial",
+      "fNecrophorum": "full",
+      "prevotella": "full",
+      "actinomyces": "full",
+      "clostridium": "partial",
+      "cAcnes": "partial",
+      "peptostreptococci": "full"
+    },
+    "daptomycin": {
+      "bFragilis": "none",
+      "fNecrophorum": "none",
+      "prevotella": "none",
+      "actinomyces": "none",
+      "clostridium": "none",
+      "cAcnes": "none",
+      "peptostreptococci": "none"
+    },
+    "dicloxacillin": {
+      "bFragilis": "none",
+      "fNecrophorum": "none",
+      "prevotella": "none",
+      "actinomyces": "none",
+      "clostridium": "none",
+      "cAcnes": "partial",
+      "peptostreptococci": "none"
+    },
+    "doxycycline": {
+      "bFragilis": "none",
+      "fNecrophorum": "partial",
+      "prevotella": "partial",
+      "actinomyces": "partial",
+      "clostridium": "none",
+      "cAcnes": "full",
+      "peptostreptococci": "partial"
+    },
+    "ertapenem": {
+      "bFragilis": "full",
+      "fNecrophorum": "full",
+      "prevotella": "full",
+      "actinomyces": "full",
+      "clostridium": "full",
+      "cAcnes": "full",
+      "peptostreptococci": "full"
+    },
+    "erythromycin": {
+      "bFragilis": "none",
+      "fNecrophorum": "none",
+      "prevotella": "none",
+      "actinomyces": "partial",
+      "clostridium": "none",
+      "cAcnes": "partial",
+      "peptostreptococci": "none"
+    },
+    "gentamicin": {
+      "bFragilis": "none",
+      "fNecrophorum": "none",
+      "prevotella": "none",
+      "actinomyces": "none",
+      "clostridium": "none",
+      "cAcnes": "none",
+      "peptostreptococci": "none"
+    },
+    "imipenem": {
+      "bFragilis": "full",
+      "fNecrophorum": "full",
+      "prevotella": "full",
+      "actinomyces": "full",
+      "clostridium": "full",
+      "cAcnes": "full",
+      "peptostreptococci": "full"
+    },
+    "levofloxacin": {
+      "bFragilis": "none",
+      "fNecrophorum": "partial",
+      "prevotella": "partial",
+      "actinomyces": "none",
+      "clostridium": "none",
+      "cAcnes": "partial",
+      "peptostreptococci": "none"
+    },
+    "linezolid": {
+      "bFragilis": "none",
+      "fNecrophorum": "none",
+      "prevotella": "none",
+      "actinomyces": "partial",
+      "clostridium": "partial",
+      "cAcnes": "full",
+      "peptostreptococci": "partial"
+    },
+    "meropenem": {
+      "bFragilis": "full",
+      "fNecrophorum": "full",
+      "prevotella": "full",
+      "actinomyces": "full",
+      "clostridium": "full",
+      "cAcnes": "full",
+      "peptostreptococci": "full"
+    },
+    "metronidazole": {
+      "bFragilis": "full",
+      "fNecrophorum": "full",
+      "prevotella": "full",
+      "actinomyces": "none",
+      "clostridium": "full",
+      "cAcnes": "none",
+      "peptostreptococci": "full"
+    },
+    "moxifloxacin": {
+      "bFragilis": "partial",
+      "fNecrophorum": "full",
+      "prevotella": "full",
+      "actinomyces": "partial",
+      "clostridium": "partial",
+      "cAcnes": "full",
+      "peptostreptococci": "partial"
+    },
+    "nafcillin": {
+      "bFragilis": "none",
+      "fNecrophorum": "none",
+      "prevotella": "none",
+      "actinomyces": "none",
+      "clostridium": "none",
+      "cAcnes": "partial",
+      "peptostreptococci": "none"
+    },
+    "nitrofurantoin": {
+      "bFragilis": "none",
+      "fNecrophorum": "none",
+      "prevotella": "none",
+      "actinomyces": "none",
+      "clostridium": "none",
+      "cAcnes": "none",
+      "peptostreptococci": "none"
+    },
+    "penicillin": {
+      "bFragilis": "none",
+      "fNecrophorum": "full",
+      "prevotella": "partial",
+      "actinomyces": "full",
+      "clostridium": "full",
+      "cAcnes": "full",
+      "peptostreptococci": "full"
+    },
+    "pipTazo": {
+      "bFragilis": "full",
+      "fNecrophorum": "full",
+      "prevotella": "full",
+      "actinomyces": "full",
+      "clostridium": "full",
+      "cAcnes": "full",
+      "peptostreptococci": "full"
+    },
+    "tigecycline": {
+      "bFragilis": "full",
+      "fNecrophorum": "full",
+      "prevotella": "full",
+      "actinomyces": "full",
+      "clostridium": "full",
+      "cAcnes": "full",
+      "peptostreptococci": "full"
+    },
+    "tmpSmx": {
+      "bFragilis": "none",
+      "fNecrophorum": "none",
+      "prevotella": "none",
+      "actinomyces": "none",
+      "clostridium": "none",
+      "cAcnes": "partial",
+      "peptostreptococci": "none"
+    },
+    "tobramycin": {
+      "bFragilis": "none",
+      "fNecrophorum": "none",
+      "prevotella": "none",
+      "actinomyces": "none",
+      "clostridium": "none",
+      "cAcnes": "none",
+      "peptostreptococci": "none"
+    },
+    "vancomycin": {
+      "bFragilis": "none",
+      "fNecrophorum": "none",
+      "prevotella": "none",
+      "actinomyces": "full",
+      "clostridium": "full",
+      "cAcnes": "full",
+      "peptostreptococci": "full"
+    }
+  }
+}
