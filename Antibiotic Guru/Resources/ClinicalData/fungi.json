@@ -1,0 +1,58 @@
+{
+  "fungi": [
+    {
+      "id": "candidaAlbicans",
+      "name": "Candida albicans",
+      "shortName": "C. albicans",
+      "category": "yeasts"
+    },
+    {
+      "id": "candidaGlabrata",
+      "name": "Candida glabrata",
+      "shortName": "C. glabrata",
+      "category": "yeasts"
+    },
+    {
+      "id": "candidaKrusei",
+      "name": "Candida krusei",
+      "shortName": "C. krusei",
+      "category": "yeasts"
+    },
+    {
+      "id": "candidaParapsilosis",
+      "name": "Candida parapsilosis",
+      "shortName": "C. parapsilosis",
+      "category": "yeasts"
+    },
+    {
+      "id": "candidaAuris",
+      "name": "Candida auris",
+      "shortName": "C. auris",
+      "category": "yeasts"
+    },
+    {
+      "id": "cryptococcus",
+      "name": "Cryptococcus neoformans",
+      "shortName": "Cryptococcus",
+      "category": "yeasts"
+    },
+    {
+      "id": "aspergillus",
+      "name": "Aspergillus species",
+      "shortName": "Aspergillus",
+      "category": "molds"
+    },
+    {
+      "id": "mucorales",
+      "name": "Mucorales (Mucor, Rhizopus)",
+      "shortName": "Mucorales",
+      "category": "molds"
+    },
+    {
+      "id": "pneumocystis",
+      "name": "Pneumocystis jirovecii",
+      "shortName": "Pneumocystis",
+      "category": "molds"
+    }
+  ]
+}

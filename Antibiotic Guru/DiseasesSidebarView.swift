@@ -3,8 +3,11 @@ import SwiftUI
 struct DiseasesSidebarView: View {
     let diseases: [Disease]
     let bacteria: [Bacterium]
+    let fungi: [Fungus]
     let coverageMap: [BacteriumID: CoverageLevel]
+    let fungalCoverageMap: [FungusID: CoverageLevel]
     let highlightedBacteria: Set<BacteriumID>
+    let highlightedFungi: Set<FungusID>
     @Binding var selectedDisease: Disease?
     @Binding var searchText: String
     let onSelect: (Disease) -> Void
@@ -17,6 +20,12 @@ struct DiseasesSidebarView: View {
     private var groupedBacteria: [(category: BacteriaCategory, bacteria: [Bacterium])] {
         BacteriaCategory.allCases.map { category in
             (category, bacteria.filter { $0.category == category })
+        }
+    }
+
+    private var groupedFungi: [(category: FungusCategory, fungi: [Fungus])] {
+        FungusCategory.allCases.map { category in
+            (category, fungi.filter { $0.category == category })
         }
     }
 
@@ -42,6 +51,10 @@ struct DiseasesSidebarView: View {
                 Divider()
 
                 bacteriaGroupsList
+
+                Divider()
+
+                fungiGroupsList
             }
             .padding(.vertical, 8)
         }
@@ -67,7 +80,7 @@ struct DiseasesSidebarView: View {
     private var bacteriaGroupsList: some View {
         ForEach(groupedBacteria, id: \.category) { group in
             VStack(alignment: .leading, spacing: 2) {
-                Text(group.category.rawValue)
+                Text(group.category.displayName)
                     .font(.subheadline.bold())
                     .padding(.horizontal, 12)
 
@@ -88,10 +101,41 @@ struct DiseasesSidebarView: View {
         }
     }
 
+    private var fungiGroupsList: some View {
+        ForEach(groupedFungi, id: \.category) { group in
+            VStack(alignment: .leading, spacing: 2) {
+                Text(group.category.displayName)
+                    .font(.subheadline.bold())
+                    .padding(.horizontal, 12)
+
+                ForEach(group.fungi) { fungus in
+                    HStack(spacing: 6) {
+                        Circle()
+                            .fill(fungusIndicatorColor(for: fungus))
+                            .frame(width: 10, height: 10)
+                        Text(fungus.name)
+                            .font(.system(size: 12))
+                            .foregroundColor(.primary)
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 1)
+                }
+            }
+            .padding(.bottom, 4)
+        }
+    }
+
     private func bacteriaIndicatorColor(for bacterium: Bacterium) -> Color {
         if !highlightedBacteria.isEmpty {
             return highlightedBacteria.contains(bacterium.id) ? .orange : Color.gray.opacity(0.4)
         }
         return coverageMap[bacterium.id]?.displayColor ?? Color.gray.opacity(0.4)
+    }
+
+    private func fungusIndicatorColor(for fungus: Fungus) -> Color {
+        if !highlightedFungi.isEmpty {
+            return highlightedFungi.contains(fungus.id) ? .orange : Color.gray.opacity(0.4)
+        }
+        return fungalCoverageMap[fungus.id]?.displayColor ?? Color.gray.opacity(0.4)
     }
 }

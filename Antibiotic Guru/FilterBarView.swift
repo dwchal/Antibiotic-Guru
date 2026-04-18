@@ -1,19 +1,35 @@
 import SwiftUI
 
+enum ChartMode {
+    case bacteria
+    case fungi
+}
+
 struct FilterBarView: View {
     @Binding var categoryFilter: BacteriaCategory?
+    @Binding var fungusFilter: FungusCategory?
     @Binding var showAnaerobeDetail: Bool
+    let chartMode: ChartMode
 
     var body: some View {
         VStack(spacing: 6) {
-            HStack(spacing: 8) {
-                filterButton("All", category: nil, color: .blue)
-                filterButton("Gram Positive", category: .gramPositive, color: .purple)
-                filterButton("Gram Negative", category: .gramNegative, color: .red)
-            }
-            HStack(spacing: 8) {
-                anaerobeDetailButton
-                filterButton("Atypicals", category: .atypicals, color: .green)
+            switch chartMode {
+            case .bacteria:
+                HStack(spacing: 8) {
+                    bacteriaFilterButton("All", category: nil, color: .blue)
+                    bacteriaFilterButton("Gram Positive", category: .gramPositive, color: .purple)
+                    bacteriaFilterButton("Gram Negative", category: .gramNegative, color: .red)
+                }
+                HStack(spacing: 8) {
+                    anaerobeDetailButton
+                    bacteriaFilterButton("Atypicals", category: .atypicals, color: .green)
+                }
+            case .fungi:
+                HStack(spacing: 8) {
+                    fungusFilterButton("All Fungi", category: nil, color: .teal)
+                    fungusFilterButton("Yeasts", category: .yeasts, color: .cyan)
+                    fungusFilterButton("Molds", category: .molds, color: .indigo)
+                }
             }
         }
         .padding(.horizontal)
@@ -38,10 +54,26 @@ struct FilterBarView: View {
         .buttonStyle(.plain)
     }
 
-    private func filterButton(_ title: String, category: BacteriaCategory?, color: Color) -> some View {
+    private func bacteriaFilterButton(_ title: String, category: BacteriaCategory?, color: Color) -> some View {
         let isSelected = categoryFilter == category
         return Button {
             categoryFilter = isSelected ? nil : category
+        } label: {
+            Text(title)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundColor(isSelected ? .white : color)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+                .background(isSelected ? color : color.opacity(0.15))
+                .cornerRadius(8)
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func fungusFilterButton(_ title: String, category: FungusCategory?, color: Color) -> some View {
+        let isSelected = fungusFilter == category
+        return Button {
+            fungusFilter = isSelected ? nil : category
         } label: {
             Text(title)
                 .font(.system(size: 13, weight: .semibold))
