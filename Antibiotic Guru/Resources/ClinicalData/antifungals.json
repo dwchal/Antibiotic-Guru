@@ -12,6 +12,9 @@
         "cryptococcus": "full",
         "aspergillus": "none",
         "mucorales": "none",
+        "fusarium": "none",
+        "scedosporium": "none",
+        "lomentospora": "none",
         "pneumocystis": "none"
       }
     },
@@ -27,6 +30,9 @@
         "cryptococcus": "full",
         "aspergillus": "full",
         "mucorales": "none",
+        "fusarium": "partial",
+        "scedosporium": "full",
+        "lomentospora": "partial",
         "pneumocystis": "none"
       }
     },
@@ -42,6 +48,9 @@
         "cryptococcus": "full",
         "aspergillus": "full",
         "mucorales": "partial",
+        "fusarium": "partial",
+        "scedosporium": "partial",
+        "lomentospora": "partial",
         "pneumocystis": "none"
       }
     },
@@ -57,6 +66,9 @@
         "cryptococcus": "full",
         "aspergillus": "full",
         "mucorales": "partial",
+        "fusarium": "partial",
+        "scedosporium": "partial",
+        "lomentospora": "partial",
         "pneumocystis": "none"
       }
     },
@@ -72,6 +84,9 @@
         "cryptococcus": "none",
         "aspergillus": "partial",
         "mucorales": "none",
+        "fusarium": "none",
+        "scedosporium": "none",
+        "lomentospora": "none",
         "pneumocystis": "partial"
       }
     },
@@ -87,6 +102,9 @@
         "cryptococcus": "none",
         "aspergillus": "partial",
         "mucorales": "none",
+        "fusarium": "none",
+        "scedosporium": "none",
+        "lomentospora": "none",
         "pneumocystis": "partial"
       }
     },
@@ -102,6 +120,9 @@
         "cryptococcus": "none",
         "aspergillus": "partial",
         "mucorales": "none",
+        "fusarium": "none",
+        "scedosporium": "none",
+        "lomentospora": "none",
         "pneumocystis": "partial"
       }
     },
@@ -117,6 +138,9 @@
         "cryptococcus": "full",
         "aspergillus": "full",
         "mucorales": "full",
+        "fusarium": "partial",
+        "scedosporium": "partial",
+        "lomentospora": "none",
         "pneumocystis": "none"
       }
     }

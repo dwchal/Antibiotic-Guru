@@ -49,6 +49,24 @@
       "category": "molds"
     },
     {
+      "id": "fusarium",
+      "name": "Fusarium species",
+      "shortName": "Fusarium",
+      "category": "molds"
+    },
+    {
+      "id": "scedosporium",
+      "name": "Scedosporium apiospermum",
+      "shortName": "Scedosporium",
+      "category": "molds"
+    },
+    {
+      "id": "lomentospora",
+      "name": "Lomentospora prolificans",
+      "shortName": "Lomentospora",
+      "category": "molds"
+    },
+    {
       "id": "pneumocystis",
       "name": "Pneumocystis jirovecii",
       "shortName": "Pneumocystis",
