@@ -1,6 +1,6 @@
 import SwiftUI
 
-enum ChartMode {
+enum ChartMode: Hashable {
     case bacteria
     case fungi
 }
