@@ -6,6 +6,7 @@ struct ContentView: View {
     @State private var selectedDisease: Disease?
     @State private var categoryFilter: BacteriaCategory?
     @State private var fungusFilter: FungusCategory?
+    @State private var chartMode: ChartMode = .bacteria
     @State private var showAnaerobeDetail = false
     @State private var antibioticSearchText = ""
     @State private var antifungalSearchText = ""
@@ -15,11 +16,6 @@ struct ContentView: View {
     @SceneStorage("selectedAntifungalId") private var savedAntifungalId: String?
     @SceneStorage("selectedDiseaseId") private var savedDiseaseId: String?
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-
-    private var chartMode: ChartMode {
-        if selectedAntifungal != nil { return .fungi }
-        return .bacteria
-    }
 
     private var coverageMap: [BacteriumID: CoverageLevel] {
         selectedAntibiotic?.coverage ?? [:]
@@ -227,6 +223,12 @@ struct ContentView: View {
             if horizontalSizeClass != .compact {
                 selectionHeader
             }
+            Picker("Coverage View", selection: $chartMode) {
+                Text("Bacteria").tag(ChartMode.bacteria)
+                Text("Fungi").tag(ChartMode.fungi)
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal, 12)
             switch chartMode {
             case .bacteria:
                 SpectrumPieChartView(
@@ -368,6 +370,7 @@ struct ContentView: View {
     // MARK: - Selection
 
     private func selectAntibiotic(_ antibiotic: Antibiotic) {
+        chartMode = .bacteria
         selectedDisease = nil
         savedDiseaseId = nil
         selectedAntifungal = nil
@@ -383,6 +386,7 @@ struct ContentView: View {
     }
 
     private func selectAntifungal(_ antifungal: Antifungal) {
+        chartMode = .fungi
         selectedDisease = nil
         savedDiseaseId = nil
         selectedAntibiotic = nil
@@ -414,8 +418,10 @@ struct ContentView: View {
     private func restoreSelection() {
         if let id = savedAntibioticId {
             selectedAntibiotic = allAntibiotics.first { $0.id.rawValue == id }
+            chartMode = .bacteria
         } else if let id = savedAntifungalId {
             selectedAntifungal = allAntifungals.first { $0.id.rawValue == id }
+            chartMode = .fungi
         } else if let id = savedDiseaseId {
             selectedDisease = allDiseases.first { $0.id == id }
         }
