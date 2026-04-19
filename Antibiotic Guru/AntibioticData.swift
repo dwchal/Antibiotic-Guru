@@ -157,6 +157,9 @@ enum FungusID: String, CaseIterable, Hashable, Codable {
     case aspergillus
     case cryptococcus
     case mucorales
+    case fusarium
+    case scedosporium
+    case lomentospora
     case pneumocystis
 }
 
