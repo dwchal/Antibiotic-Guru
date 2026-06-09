@@ -62,7 +62,7 @@ private let blbliData: [BLBLIEntry] = [
     BLBLIEntry(drug: "FEP-Taniborbactam", esbl: .active, kpc: .active, cpeMBL: .active, cpeOXA48: .active, ampCUp: .active, oprDMinus: .active, cpaMBL: .active, cpaOXAESBL: .variable, abESBL: .notActive, cpAbMBL: .notActive, oxa2340: .notActive),
     BLBLIEntry(drug: "FEP-Enmetazobactam", esbl: .active, kpc: .variable, cpeMBL: .notActive, cpeOXA48: .variable, ampCUp: .notActive, oprDMinus: .notActive, cpaMBL: .notActive, cpaOXAESBL: .notActive, abESBL: .notActive, cpAbMBL: .notActive, oxa2340: .notActive),
     BLBLIEntry(drug: "CTB-Ledaborbactam", esbl: .active, kpc: .active, cpeMBL: .notActive, cpeOXA48: .active, ampCUp: .notActive, oprDMinus: .notActive, cpaMBL: .notActive, cpaOXAESBL: .notActive, abESBL: .notActive, cpAbMBL: .notActive, oxa2340: .notActive),
-    BLBLIEntry(drug: "MER-Xerurorbactam", esbl: .active, kpc: .active, cpeMBL: .active, cpeOXA48: .active, ampCUp: .variable, oprDMinus: .active, cpaMBL: .active, cpaOXAESBL: .active, abESBL: .active, cpAbMBL: .active, oxa2340: .active),
+    BLBLIEntry(drug: "MER-Xeruborbactam", esbl: .active, kpc: .active, cpeMBL: .active, cpeOXA48: .active, ampCUp: .variable, oprDMinus: .active, cpaMBL: .active, cpaOXAESBL: .active, abESBL: .active, cpAbMBL: .active, oxa2340: .active),
     BLBLIEntry(drug: "Cefiderocol", esbl: .active, kpc: .active, cpeMBL: .active, cpeOXA48: .active, ampCUp: .variable, oprDMinus: .variable, cpaMBL: .variable, cpaOXAESBL: .variable, abESBL: .variable, cpAbMBL: .variable, oxa2340: .variable),
 ]
 
