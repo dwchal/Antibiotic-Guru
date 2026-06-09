@@ -69,13 +69,13 @@
     {
       "id": "anaerobesBelow",
       "name": "Anaerobes Below the Diaphragm",
-      "shortName": "Anaerobes\\nBelow Diaphragm",
+      "shortName": "Anaerobes\nBelow Diaphragm",
       "category": "anaerobes"
     },
     {
       "id": "anaerobesAbove",
       "name": "Anaerobes Above the Diaphragm",
-      "shortName": "Anaerobes\\nAbove Diaphragm",
+      "shortName": "Anaerobes\nAbove Diaphragm",
       "category": "anaerobes"
     },
     {
@@ -87,13 +87,13 @@
     {
       "id": "nosocomialGN",
       "name": "Nosocomial Gram Neg. (non-Pseudomonal)",
-      "shortName": "Nosocomial GN\\n(non-Pseudomonal)",
+      "shortName": "Nosocomial GN\n(non-Pseudomonal)",
       "category": "gramNegative"
     },
     {
       "id": "communityGN",
       "name": "Community Gram Neg. (Enterobacteriaceae)",
-      "shortName": "Community GN\\n(Enterobact.)",
+      "shortName": "Community GN\n(Enterobact.)",
       "category": "gramNegative"
     }
   ]

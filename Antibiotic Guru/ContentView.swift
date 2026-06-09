@@ -412,6 +412,12 @@ struct ContentView: View {
         } else {
             selectedDisease = disease
             savedDiseaseId = disease.id
+            // Show the chart that actually has highlighted organisms for this disease.
+            if disease.associatedBacteria.isEmpty && !disease.associatedFungi.isEmpty {
+                chartMode = .fungi
+            } else {
+                chartMode = .bacteria
+            }
         }
     }
 
@@ -423,7 +429,11 @@ struct ContentView: View {
             selectedAntifungal = allAntifungals.first { $0.id.rawValue == id }
             chartMode = .fungi
         } else if let id = savedDiseaseId {
-            selectedDisease = allDiseases.first { $0.id == id }
+            let disease = allDiseases.first { $0.id == id }
+            selectedDisease = disease
+            if let disease, disease.associatedBacteria.isEmpty && !disease.associatedFungi.isEmpty {
+                chartMode = .fungi
+            }
         }
     }
 }
